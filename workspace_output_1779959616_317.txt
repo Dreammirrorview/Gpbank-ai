@@ -1,0 +1,11 @@
+function showCustTab(tab){
+document.querySelectorAll('.cust-tab').forEach(t=>t.classList.add('hidden'));
+document.getElementById('ctab-'+tab).classList.remove('hidden');
+document.querySelectorAll('#custSidebar .nav-item').forEach(n=>n.classList.remove('active'));
+event.target.closest('.nav-item')?.classList.add('active');
+document.getElementById('custPageTitle').textContent={overview:'My Dashboard',accounts:'My Accounts',transfer:'Transfer',crypto:'Crypto',cards:'My Card',history:'History',profile:'Profile',msg:'Message Admin'}[tab]||'Dashboard'}
+function updateCustStats(c){
+document.getElementById('custStatsGrid').innerHTML=`<div class="stat-card green"><h4>Account Number</h4><div class="value" style="font-size:1.2em">${c.accountNumber}</div></div><div class="stat-card blue"><h4>NGN Balance</h4><div class="value">₦${fmt(c.balances.NGN||0)}</div></div><div class="stat-card gold"><h4>USD Balance</h4><div class="value">$${fmt(c.balances.USD||0)}</div></div><div class="stat-card red"><h4>Status</h4><div class="value" style="font-size:1em"><span class="badge badge-${c.status==='active'?'success':'danger'}">${c.status}</span></div></div>`}
+function loadCustBalances(c){
+document.getElementById('custBalGrid').innerHTML=CURRENCIES.map(cu=>`<div class="stat-card blue"><h4>${cu.flag} ${cu.code}</h4><div class="value">${cu.symbol}${fmt(c.balances[cu.code]||0)}</div></div>`).join('')}
+function loadCustHistory(c){

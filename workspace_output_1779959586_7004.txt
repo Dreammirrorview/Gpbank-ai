@@ -1,0 +1,154 @@
+function addDepartment(){const name=prompt('Department name:');if(!name)return;
+DB.departments.push({name,employees:[]});loadDeptUI()}
+function loadDeptUI(){
+document.getElementById('deptContainer').innerHTML=DB.departments.map((d,di)=>`<div class="dept-card"><h4>${d.name} <button class="btn btn-sm btn-primary" onclick="addEmployee(${di})">+ Add</button></h4>${d.employees.map((e,ei)=>`<div class="emp-row"><span class="status-dot green"></span><span>${e.name}</span><span style="color:#888">${e.position}</span><span style="color:var(--gold)">${e.accountNumber}</span><span>${e.bankName}</span><span style="color:var(--accent)">₦${fmt(e.amount)}</span><button class="btn btn-sm btn-primary" onclick="payOneSalary(${di},${ei})">Pay</button><button class="btn btn-sm btn-danger" onclick="removeEmployee(${di},${ei})">✕</button></div>`).join('')}</div>`).join('')}
+function addEmployee(di){const name=prompt('Name:');const pos=prompt('Position:');const acc=prompt('Account Number:');const bank=prompt('Bank Name:');const amt=parseFloat(prompt('Amount (NGN):')||0);const phone=prompt('Phone (optional):');const email=prompt('Email (optional):');
+if(!name||!acc){notify('Name and account required','error');return}
+DB.departments[di].employees.push({name,position:pos,accountNumber:acc,bankName:bank,amount:amt,phone:phone||'',email:email||'',status:'pending'});loadDeptUI();notify('Employee added','success')}
+function payOneSalary(di,ei){const e=DB.departments[di].employees[ei];ADMIN_BAL.NGN-=e.amount;e.status='paid';
+DB.transactions.push({ref:genTxRef(),type:'salary',from:'Global Pilgrim Bank',to:e.bankName+' - '+e.accountNumber+' - '+e.name,currency:'NGN',amount:e.amount,status:'success',date:now()});
+updateAdminStats();loadAdminBalances();loadDeptUI();notify('Paid ₦'+fmt(e.amount)+' to '+e.name,'success')}
+function payAllSalary(){DB.departments.forEach(d=>d.employees.forEach((e,i)=>{if(e.status!=='paid'){ADMIN_BAL.NGN-=e.amount;e.status='paid';DB.transactions.push({ref:genTxRef(),type:'salary',from:'Global Pilgrim Bank',to:e.bankName+' - '+e.accountNumber,currency:'NGN',amount:e.amount,status:'success',date:now()})}}));updateAdminStats();loadAdminBalances();loadDeptUI();notify('All salaries paid','success')}
+function removeEmployee(di,ei){DB.departments[di].employees.splice(ei,1);loadDeptUI()}
+function searchSalary(){const q=document.getElementById('salarySearch').value.toLowerCase();document.querySelectorAll('.emp-row').forEach(r=>{r.style.display=r.textContent.toLowerCase().includes(q)?'flex':'none'})}
+
+// ============ BETTING ============
+function loadMatches(){
+const league=document.getElementById('betLeague').value;
+const teams={'EPL':[["Arsenal","Chelsea"],["Man City","Liverpool"],["Man United","Tottenham"],["Newcastle","Aston Villa"]],'La Liga':[["Real Madrid","Barcelona"],["Atletico Madrid","Sevilla"]],'Serie A':[["Inter Milan","AC Milan"],["Juventus","Napoli"]],'Bundesliga':[["Bayern Munich","Dortmund"],["Leipzig","Leverkusen"]],'Ligue 1':[["PSG","Marseille"],["Lyon","Monaco"]],'NPFL':[["Enyimba","Rangers"],["Shooting Stars","Kano Pillars"]],'AFCON':[["Nigeria","Ghana"],["Senegal","Cameroon"]],'FIFA World Cup':[["Brazil","Argentina"],["France","Germany"]],'Champions League':[["Real Madrid","Man City"],["Barcelona","PSG"]],'Europa League':[["Liverpool","Roma"],["Leverkusen","West Ham"]]};
+const matches=teams[league]||teams['EPL'];
+document.getElementById('matchesContainer').innerHTML=matches.map((m,i)=>`<div style="display:flex;justify-content:space-between;align-items:center;padding:10px;background:var(--primary);border-radius:8px;margin-bottom:6px"><span>${m[0]}</span><span style="color:var(--gold)">VS</span><span>${m[1]}</span><div style="display:flex;gap:4px"><button class="btn btn-sm btn-outline" onclick="selectBet(${i},'home','${m[0]}')">1H</button><button class="btn btn-sm btn-outline" onclick="selectBet(${i},'draw','Draw')">X</button><button class="btn btn-sm btn-outline" onclick="selectBet(${i},'away','${m[1]}')">2A</button></div></div>`).join('')}
+let selectedBet=null;
+function selectBet(match,side,team){selectedBet={match,side,team};notify('Selected: '+team,'info')}
+function placeBet(){if(!selectedBet){notify('Select a match first','error');return}const amt=parseFloat(document.getElementById('betAmount').value);if(isNaN(amt)||amt<5){notify('Min bet is ₦5','error');return}ADMIN_BAL.NGN-=amt;DB.transactions.push({ref:genTxRef(),type:'bet',from:'Global Pilgrim Bank',to:selectedBet.team,currency:'NGN',amount:amt,status:'success',date:now()});updateAdminStats();loadAdminBalances();notify('Bet placed: ₦'+fmt(amt)+' on '+selectedBet.team,'success')}
+
+// ============ TERMINAL ============
+function loadTerminal(){appendTerminal('system','Global Pilgrim Bank Security Terminal v3.0');appendTerminal('info','Owner: Olawale Abdul-Ganiyu Adeshina');appendTerminal('info','System initialized. All networks connected.');appendTerminal('prompt','Type "scan" to scan network, "status" for system status');loadNetworkInfo()}
+function appendTerminal(type,msg){const t=document.getElementById('mainTerminal');if(!t)return;t.innerHTML+=`<div class="line"><span class="${type}">[${type.toUpperCase()}] ${now()} → </span>${msg}</div>`;t.scrollTop=t.scrollHeight}
+function scanNetwork(){appendTerminal('info','Scanning all network interfaces...');setTimeout(()=>{appendTerminal('success','WiFi: Connected (Secured)');appendTerminal('success','Ethernet: Active');appendTerminal('success','Bluetooth: No unauthorized devices');appendTerminal('success','VPN: Active');appendTerminal('success','Firewall: Active');appendTerminal('warn','No threats detected');appendTerminal('info','IP: '+Math.floor(Math.random()*255)+'.'+Math.floor(Math.random()*255)+'.'+Math.floor(Math.random()*255)+'.'+Math.floor(Math.random()*255))},1000)}
+function voltageAction(){appendTerminal('error','⚠️ VOLTAGE PROTECTION ACTIVATED');appendTerminal('error','All unauthorized connections will be terminated');appendTerminal('warn','Increasing voltage to external attack vectors...');notify('Voltage protection active','warning')}
+function showConnections(){appendTerminal('info','Active connections:');appendTerminal('info','→ NIBSS Gateway: Connected');appendTerminal('info','→ SWIFT Network: Connected');appendTerminal('info','→ CBN Settlement: Connected');appendTerminal('info','→ Interswitch: Connected');appendTerminal('info','→ Visa/Mastercard: Connected')}
+function loadNetworkInfo(){document.getElementById('networkInfo').innerHTML=`<p>IP: ${Math.floor(Math.random()*255)}.${Math.floor(Math.random()*255)}.${Math.floor(Math.random()*255)}.${Math.floor(Math.random()*255)}</p><p>VPN: Active | Firewall: Active | Encryption: AES-256</p><p>Protocols: ISO 8583, ISO 20022, SWIFT MT/MX, NIP</p><p>Networks: NIBSS, Interswitch, Visa, Mastercard, SWIFT</p><p>USSD: *7001# | BIN: 519911, 468219, 507872</p>`}
+
+// ============ REPORTS ============
+function genStatement(){
+document.getElementById('reportOutput').innerHTML=`<div style="border:2px solid var(--gold);padding:20px;border-radius:12px"><h3 style="color:var(--gold);text-align:center">GLOBAL PILGRIM BANK NIGERIA</h3><p style="text-align:center;font-size:.8em">Account Statement | BN-998827364-GP</p><hr style="border-color:var(--border)"><p style="font-size:.85em"><strong>Account Name:</strong> ${DB.admin.name}<br><strong>Account Number:</strong> 0000000001<br><strong>Date:</strong> ${now()}<br><strong>SWIFT:</strong> GPBINGLA</p><h4 style="margin:12px 0 8px;color:var(--accent)">Balances</h4>${CURRENCIES.slice(0,6).map(c=>`<p style="font-size:.85em">${c.flag} ${c.code}: ${c.symbol}${fmt(ADMIN_BAL[c.code]||0)}</p>`).join('')}<div class="signature-stamp" style="margin-top:16px"><strong>Global Pilgrim Bank</strong><br>Original — Olawale Abdul-Ganiyu Adeshina<br>${now()}</div></div>`}
+function genTxReport(){
+document.getElementById('reportOutput').innerHTML=`<h4 style="color:var(--accent)">Transaction Report</h4><div class="table-wrap"><table><thead><tr><th>Ref</th><th>Type</th><th>From</th><th>To</th><th>Amount</th><th>Status</th><th>Date</th></tr></thead><tbody>${DB.transactions.slice(-20).map(t=>`<tr><td style="font-size:.7em">${t.ref}</td><td>${t.type}</td><td>${t.from||''}</td><td>${t.to||''}</td><td>${t.currency} ${fmt(t.amount)}</td><td><span class="badge badge-success">${t.status}</span></td><td style="font-size:.7em">${t.date}</td></tr>`).join('')}</tbody></table></div>`}
+function exportPDF(){notify('PDF exported. Use browser Print > Save as PDF','info');window.print()}
+
+// ============ MESSAGES ============
+function loadMsgCustSelect(){document.getElementById('msgCustSelect').innerHTML=DB.customers.map(c=>`<option value="${c.accountNumber}">${c.accountNumber} - ${c.firstName}</option>`).join('')}
+function sendAdminMsg(){
+const acc=document.getElementById('msgCustSelect').value;const msg=document.getElementById('adminReply').value;
+if(!msg){notify('Type a message','error');return}
+DB.messages.push({from:'admin',to:acc,message:msg,date:now()});
+document.getElementById('adminReply').value='';notify('Message sent','success')}
+function loadAdminMessages(){
+document.getElementById('msgList').innerHTML=DB.messages.map(m=>`<div style="padding:8px;border-bottom:1px solid var(--border);font-size:.85em"><strong>${m.from==='admin'?'Admin':'Customer'}</strong>: ${m.message}<br><small style="color:#666">${m.date}</small></div>`).join('')||'<p style="color:#666">No messages</p>'}
+
+// ============ CUSTOMER DASHBOARD ============
+function initCustDash(c){
+document.getElementById('custDashName').textContent=c.firstName+' '+c.lastName;
+document.getElementById('custDashAcc').textContent=c.accountNumber;
+document.getElementById('custAvatar').textContent=c.firstName[0];
+updateCustStats(c);loadCustBalances(c);loadCustHistory(c);loadCustProfile(c);loadCustCard(c);loadCustCrypto(c);populateCustSendSelect()}
+function showCustTab(tab){
+document.querySelectorAll('.cust-tab').forEach(t=>t.classList.add('hidden'));
+document.getElementById('ctab-'+tab).classList.remove('hidden');
+document.querySelectorAll('#custSidebar .nav-item').forEach(n=>n.classList.remove('active'));
+event.target.closest('.nav-item')?.classList.add('active');
+document.getElementById('custPageTitle').textContent={overview:'My Dashboard',accounts:'My Accounts',transfer:'Transfer',crypto:'Crypto',cards:'My Card',history:'History',profile:'Profile',msg:'Message Admin'}[tab]||'Dashboard'}
+function updateCustStats(c){
+document.getElementById('custStatsGrid').innerHTML=`<div class="stat-card green"><h4>Account Number</h4><div class="value" style="font-size:1.2em">${c.accountNumber}</div></div><div class="stat-card blue"><h4>NGN Balance</h4><div class="value">₦${fmt(c.balances.NGN||0)}</div></div><div class="stat-card gold"><h4>USD Balance</h4><div class="value">$${fmt(c.balances.USD||0)}</div></div><div class="stat-card red"><h4>Status</h4><div class="value" style="font-size:1em"><span class="badge badge-${c.status==='active'?'success':'danger'}">${c.status}</span></div></div>`}
+function loadCustBalances(c){
+document.getElementById('custBalGrid').innerHTML=CURRENCIES.map(cu=>`<div class="stat-card blue"><h4>${cu.flag} ${cu.code}</h4><div class="value">${cu.symbol}${fmt(c.balances[cu.code]||0)}</div></div>`).join('')}
+function loadCustHistory(c){
+document.getElementById('custRecentTx').innerHTML=DB.transactions.filter(t=>t.account===c.accountNumber).slice(-10).map(t=>`<tr><td>${t.date}</td><td>${t.type}</td><td>${t.currency} ${fmt(t.amount)}</td><td><span class="badge badge-success">${t.status}</span></td></tr>`).join('')||'<tr><td colspan="4" style="text-align:center;color:#666">No transactions</td></tr>';
+document.getElementById('custHistoryTable').innerHTML=DB.transactions.filter(t=>t.account===c.accountNumber).slice(-30).map(t=>`<tr><td>${t.date}</td><td style="font-size:.7em">${t.ref}</td><td>${t.type}</td><td>${t.currency} ${fmt(t.amount)}</td><td><span class="badge badge-success">${t.status}</span></td></tr>`).join('')||'<tr><td colspan="5" style="text-align:center;color:#666">No transactions</td></tr>'}
+function loadCustProfile(c){
+document.getElementById('custProfileInfo').innerHTML=`<div style="font-size:.9em;line-height:2"><strong>Name:</strong> ${c.firstName} ${c.lastName}<br><strong>Account:</strong> ${c.accountNumber}<br><strong>Serial:</strong> ${c.serialNumber}<br><strong>PIN:</strong> ${c.pin}<br><strong>Email:</strong> ${c.email}<br><strong>Phone:</strong> ${c.phone}<br><strong>BVN:</strong> ${c.bvn||'N/A'}<br><strong>NIN:</strong> ${c.nin||'N/A'}<br><strong>Type:</strong> ${c.accountType}<br><strong>Country:</strong> ${c.country}<br><strong>Registered:</strong> ${c.createdAt}</div>`}
+function loadCustCard(c){
+document.getElementById('custCardDisplay').innerHTML=`<div class="atm-card pilgrim"><div class="card-type">Pilgrim Card</div><div class="card-chip"></div><div class="card-number">5199 ${Math.floor(1000+Math.random()*9000)} ${Math.floor(1000+Math.random()*9000)} ${Math.floor(1000+Math.random()*9000)}</div><div class="card-details"><div><div style="font-size:.6em">CARD HOLDER</div><div class="card-holder">${(c.firstName+' '+c.lastName).toUpperCase()}</div></div><div><div style="font-size:.6em">EXPIRES</div><div>12/29</div></div></div><div class="card-brand">MASTERCARD</div></div>`}
+function loadCustCrypto(c){
+document.getElementById('custCryptoGrid').innerHTML=CRYPTO_COINS.slice(0,10).map(co=>`<div class="stat-card blue"><h4>${co.symbol}</h4><div class="value">${fmt(c.cryptoBalances[co.symbol]||0)}</div><div class="sub" style="font-size:.6em;word-break:break-all">${c.cryptoAddresses[co.symbol]||genWalletAddr()}</div></div>`).join('')}
+function populateCustSendSelect(){const el=document.getElementById('custSendBank');if(el)el.innerHTML='<option value="">Select Bank</option>'+COMMERCIAL_BANKS.map(b=>`<option value="${b.code}" data-name="${b.name}">${b.name}</option>`).join('')+MFB_BANKS.map(b=>`<option value="${b.code}" data-name="${b.name}">${b.name}</option>`).join('')}
+function custSendMoney(){
+const c=DB.loggedInCust;if(!c)return;
+const bank=document.getElementById('custSendBank');const bankName=bank.options[bank.selectedIndex]?.dataset.name||'';
+const acc=document.getElementById('custSendAcc').value;const cur=document.getElementById('custSendCur').value;
+const amt=parseFloat(document.getElementById('custSendAmt').value);const narr=document.getElementById('custSendNarr').value;
+if(!acc||isNaN(amt)||amt<=0){notify('Fill all fields','error');return}
+if((c.balances[cur]||0)<amt){notify('Insufficient balance','error');return}
+c.balances[cur]-=amt;
+DB.transactions.push({ref:genTxRef(),type:'transfer',account:c.accountNumber,from:c.accountNumber,to:bankName+' - '+acc,currency:cur,amount:amt,status:'success',date:now(),narration:narr});
+updateCustStats(c);loadCustBalances(c);notify('Sent '+fmt(amt)+' '+cur+' to '+bankName,'success')}
+function sendCustMsg(){
+const c=DB.loggedInCust;if(!c)return;const msg=document.getElementById('custMsgInput').value;
+if(!msg){notify('Type a message','error');return}
+DB.messages.push({from:c.accountNumber,to:'admin',message:msg,date:now()});
+document.getElementById('custMsgInput').value='';
+document.getElementById('custMsgList').innerHTML+=`<div class="chat-msg user"><div class="bubble">${msg}</div><small style="color:#666">${now()}</small></div>`;
+notify('Message sent to admin','success')}
+
+// ============ MODAL ============
+function openModal(title,body){document.getElementById('modalTitle').textContent=title;document.getElementById('modalBody').innerHTML=body;document.getElementById('modalOverlay').classList.add('open')}
+function closeModal(){document.getElementById('modalOverlay').classList.remove('open')}
+
+// ============ SIDEBAR TOGGLE ============
+function toggleSidebar(){document.getElementById('adminSidebar').classList.toggle('open')}
+function toggleCustSidebar(){document.getElementById('custSidebar').classList.toggle('open')}
+
+// ============ CHAT ROBOT ============
+function toggleChat(){document.getElementById('chatWindow').classList.toggle('open')}
+function sendChat(){
+const input=document.getElementById('chatInput');const msg=input.value.trim();if(!msg)return;
+document.getElementById('chatMessages').innerHTML+=`<div class="chat-msg user"><div class="bubble">${msg}</div></div>`;
+input.value='';
+setTimeout(()=>{const reply=processChat(msg);document.getElementById('chatMessages').innerHTML+=`<div class="chat-msg bot"><div class="bubble">${reply}</div></div>`;document.getElementById('chatMessages').scrollTop=9999},800)}
+function processChat(msg){
+const m=msg.toLowerCase();
+if(m.includes('balance'))return'Your admin balances: NGN ₦'+fmt(ADMIN_BAL.NGN)+' | USD $'+fmt(ADMIN_BAL.USD)+' | EUR €'+fmt(ADMIN_BAL.EUR);
+if(m.includes('transfer'))return'Go to Transfers tab to send money locally or internationally via SWIFT.';
+if(m.includes('mining'))return'Mining is running for all crypto coins and currencies. Check the Mining tab for progress.';
+if(m.includes('trade'))return'Trade Dragon platform is active. You can trade forex, crypto, and more. Auto-trading robot available.';
+if(m.includes('customer'))return'You have '+DB.customers.length+' registered customers. Go to Customers tab to manage them.';
+if(m.includes('help'))return'I can help with: balance, transfer, mining, trading, customers, settings. Just ask!';
+if(m.includes('hello')||m.includes('hi'))return'Hello! I am the Global Pilgrim Bank assistant. How can I help you today?';
+if(m.includes('owner'))return'The owner is Olawale Abdul-Ganiyu Adeshina. All rights reserved.';
+if(m.includes('bank'))return'Global Pilgrim Bank is registered with CBN, NIBSS, SWIFT. Code: 999, SWIFT: GPBINGLA.';
+return'Thank you for your message. I am processing your request. For detailed help, use the dashboard tabs or contact support@globalpilgrimbank.com';}
+
+// ============ AUTO INIT ============
+document.addEventListener('DOMContentLoaded',()=>{initSig();loadMatches();
+appendTerminal('system','Global Pilgrim Bank Security System v3.0 Initialized');
+appendTerminal('info','Owner: Olawale Abdul-Ganiyu Adeshina | BN-998827364-GP');
+appendTerminal('info','All rights reserved. Unauthorized access is prohibited.');
+// Auto-start mining
+setTimeout(()=>{startAllMining()},3000);
+// Auto currency mining
+setInterval(()=>{ADMIN_BAL.USD+=0.027;ADMIN_BAL.EUR+=0.025;ADMIN_BAL.GBP+=0.022;ADMIN_BAL.NGN+=42.5;ADMIN_BAL.CNY+=0.19;if(document.getElementById('adminDash')?.classList.contains('active')){loadAdminBalances();initCurrencyMining()}},60000);
+});
+
+// ============ SERVICE WORKER / OFFLINE ============
+if('serviceWorker' in navigator){navigator.serviceWorker.register('/sw.js').catch(()=>{})}
+
+// ============ REDIRECT SCRIPT ============
+// const target = 'https://www.globalpilgrimsbank.com';
+// All transactions secured by Global Pilgrim Bank
+
+function confirmWithdProfit(){
+const amt=parseFloat(document.getElementById('withdAmt')?.value||0);
+if(isNaN(amt)||amt<=0){notify('Invalid amount','error');return}
+if(amt>DB.trading.profitBal){notify('Insufficient profit balance','error');return}
+DB.trading.profitBal-=amt;document.getElementById('tradeProfitBal').textContent='$'+fmt(DB.trading.profitBal);
+DB.transactions.push({ref:genTxRef(),type:'withdrawal',from:'Trade Dragon Profit',to:'Owner Bank Account',currency:'USD',amount:amt,status:'success',date:now()});
+closeModal();notify('Withdrawal of $'+fmt(amt)+' initiated','success')}
+
+function updateAdminSettings(){
+const u=document.getElementById('setAdminUser').value;const p=document.getElementById('setAdminPass').value;
+if(u)DB.admin.username=u;if(p)DB.admin.password=p;
+notify('Settings saved','success')}
+</script>
+</body>
+</html>

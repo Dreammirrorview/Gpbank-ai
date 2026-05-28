@@ -1,0 +1,71 @@
+CRYPTO_COINS.forEach(c=>{if(!DB.mining[c.symbol])DB.mining[c.symbol]={balance:0,progress:0,mining:false,addr:c.addr}});
+loadMiningCards()}
+function loadMiningCards(){
+document.getElementById('miningCardsContainer').innerHTML=CRYPTO_COINS.map(c=>{const m=DB.mining[c.symbol];return`<div class="mining-card"><div class="mining-info"><h4>${c.symbol} — ${c.name}</h4><div class="progress-text">Balance: ${fmt(m.balance,8)} | Progress: ${m.progress.toFixed(2)}%</div><div class="mining-bar"><div class="fill" style="width:${m.progress}%"></div></div></div><span class="mining-status ${m.mining?'active':'paused'}">${m.mining?'Mining':'Paused'}</span></div>`}).join('')}
+function startAllMining(){
+const speed=parseInt(document.getElementById('miningSpeed')?.value||60000);
+DB.miningIntervals.forEach(clearInterval);DB.miningIntervals=[];
+CRYPTO_COINS.forEach(c=>{DB.mining[c.symbol].mining=true});
+const iv=setInterval(()=>{
+CRYPTO_COINS.forEach(c=>{const m=DB.mining[c.symbol];if(m.mining){m.progress+=1;if(m.progress>=100){m.progress=0;m.balance+=1;ADMIN_BAL.USD+=1}loadMiningCards();loadCryptoUI()}})},speed/100);
+DB.miningIntervals.push(iv);notify('Mining started for all coins','success')}
+function stopAllMining(){DB.miningIntervals.forEach(clearInterval);DB.miningIntervals=[];CRYPTO_COINS.forEach(c=>DB.mining[c.symbol].mining=false);loadMiningCards();notify('Mining stopped','info')}
+function initCurrencyMining(){
+const curMining=['USD','EUR','GBP','NGN','CNY'];
+document.getElementById('currencyMiningContainer').innerHTML=curMining.map(c=>{const cu=CURRENCIES.find(x=>x.code===c);return`<div class="mining-card"><div class="mining-info"><h4>${cu.flag} ${cu.code} — ${cu.name}</h4><div class="progress-text">Balance: ${cu.symbol}${fmt(ADMIN_BAL[c]||0)} | Mining: Active</div><div class="mining-bar"><div class="fill" style="width:${Math.random()*30}%"></div></div></div><span class="mining-status active">Mining</span></div>`}).join('')}
+
+// ============ TRADING ============
+function initTrading(){
+DB.trading.prices={'EUR/USD':1.0856,'GBP/USD':1.2634,'USD/JPY':154.23,'BTC/USD':67234.50,'ETH/USD':3567.80,'PILGRIM/USD':1.00,'USD/NGN':1580.50,'XAU/USD':2345.60};
+updateTradeDisplay();startPriceUpdates();
+document.getElementById('tradeMainBal').textContent='$'+fmt(DB.trading.mainBal);
+document.getElementById('tradeProfitBal').textContent='$'+fmt(DB.trading.profitBal)}
+function changeTradePair(){const pair=document.getElementById('tradePairSelect').value;document.getElementById('tradePairDisplay').textContent=pair;updateTradeDisplay()}
+function updateTradeDisplay(){
+const pair=document.getElementById('tradePairSelect').value;const price=DB.trading.prices[pair]||1;
+const spread=price*0.0002;
+document.getElementById('tradePrice').textContent=price.toFixed(pair.includes('JPY')||pair.includes('NGN')?2:5);
+document.getElementById('tradePrice').className='price-display '+(Math.random()>.5?'price-up':'price-down');
+document.getElementById('buyPrice').textContent=(price+spread).toFixed(5);
+document.getElementById('sellPrice').textContent=(price-spread).toFixed(5);
+renderCandles()}
+function startPriceUpdates(){
+DB.priceInterval=setInterval(()=>{
+const pair=document.getElementById('tradePairSelect')?.value;if(!pair)return;
+const p=DB.trading.prices[pair];const change=(Math.random()-.5)*p*0.002;
+DB.trading.prices[pair]=Math.max(p+change,p*0.9);updateTradeDisplay();
+if(DB.trading.autoTrade)autoTradeLogic()},2000)}
+function renderCandles(){
+const chart=document.getElementById('tradeChart');if(!chart)return;
+let html='';for(let i=0;i<40;i++){const h=20+Math.random()*160;const color=Math.random()>.5?'var(--success)':'var(--danger)';
+html+=`<div class="candle"><div class="candle-wick" style="height:${h*.2}px"></div><div class="candle-body" style="height:${h*.6}px;background:${color}"></div><div class="candle-wick" style="height:${h*.2}px"></div></div>`}
+chart.innerHTML=html}
+function toggleAutoTrade(){
+DB.trading.autoTrade=!DB.trading.autoTrade;
+document.getElementById('autoTradeBtn').textContent='🤖 Auto Trade: '+(DB.trading.autoTrade?'ON':'OFF');
+document.getElementById('autoTradeBtn').style.background=DB.trading.autoTrade?'var(--success)':'transparent';
+notify('Auto trade '+(DB.trading.autoTrade?'enabled':'disabled'),'info')}
+function autoTradeLogic(){
+if(!DB.trading.autoTrade||DB.trading.positions.length>5)return;
+const pair=document.getElementById('tradePairSelect')?.value;if(!pair)return;
+const price=DB.trading.prices[pair];const lot=0.01;const type=Math.random()>.5?'BUY':'SELL';
+DB.trading.positions.push({id:Date.now(),pair,type,lot,openPrice:price,pnl:0,time:now()});
+setTimeout(()=>{if(DB.trading.positions.length>0){const pos=DB.trading.positions.shift();const profit=(Math.random()*20-5);DB.trading.profitBal+=profit;document.getElementById('tradeProfitBal').textContent='$'+fmt(DB.trading.profitBal)}},10000);
+updatePositionsDisplay()}
+function placeTrade(type){
+const pair=document.getElementById('tradePairSelect').value;const lot=parseFloat(document.getElementById('lotSize').value)||0.01;
+const price=DB.trading.prices[pair];
+DB.trading.positions.push({id:Date.now(),pair,type,lot,openPrice:price,pnl:0,time:now()});
+notify(type+' '+lot+' lot '+pair+' at '+price.toFixed(5),'success');updatePositionsDisplay()}
+function updatePositionsDisplay(){
+const div=document.getElementById('openPositions');
+div.innerHTML=DB.trading.positions.map(p=>`<div style="padding:4px 0;border-bottom:1px solid var(--border)"><span class="badge badge-${p.type==='BUY'?'success':'danger'}">${p.type}</span> ${p.pair} ${p.lot}lot @ ${p.openPrice.toFixed(5)} <button class="btn btn-sm btn-outline" onclick="closePosition(${p.id})" style="font-size:.7em;padding:2px 6px">Close</button></div>`).join('')||'<p style="color:#666">No open positions</p>'}
+function closePosition(id){const idx=DB.trading.positions.findIndex(p=>p.id===id);if(idx>=0){const p=DB.trading.positions[idx];const profit=(Math.random()*50-15);DB.trading.profitBal+=profit;DB.trading.positions.splice(idx,1);document.getElementById('tradeProfitBal').textContent='$'+fmt(DB.trading.profitBal);updatePositionsDisplay();notify('Position closed. Profit: $'+fmt(profit),'success')}}
+function moveProfitToMain(){DB.trading.mainBal+=DB.trading.profitBal;DB.trading.profitBal=0;document.getElementById('tradeMainBal').textContent='$'+fmt(DB.trading.mainBal);document.getElementById('tradeProfitBal').textContent='$0.00';notify('Profit moved to main balance','success')}
+function withdrawProfit(){openModal('Withdraw Trading Profit',`<p>Profit Balance: $${fmt(DB.trading.profitBal)}</p><div class="form-group"><label>Bank</label><select id="withdBank">${OWNER_BANKS.map(b=>`<option>${b.bank} - ${b.acc}</option>`).join('')}</select></div><div class="form-group"><label>Amount ($)</label><input id="withdAmt" type="number" value="${DB.trading.profitBal}"></div><button class="btn btn-primary" onclick="confirmWithdProfit()">Withdraw</button>`)}
+
+// ============ INVESTMENT ============
+function submitInvestment(){const type=document.getElementById('investType').value;const amt=document.getElementById('investAmount').value;const cur=document.getElementById('investCurrency').value;if(!amt){notify('Enter amount','error');return}notify('Investment registration submitted! Check your email for confirmation.','success')}
+
+// ============ SALARY/PAYROLL ============
+function addDepartment(){const name=prompt('Department name:');if(!name)return;

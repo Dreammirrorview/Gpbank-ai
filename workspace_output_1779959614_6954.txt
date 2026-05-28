@@ -1,0 +1,9 @@
+566:<div id="ctab-overview" class="cust-tab">
+570:<div id="ctab-accounts" class="cust-tab hidden">
+573:<div id="ctab-transfer" class="cust-tab hidden">
+581:<div id="ctab-crypto" class="cust-tab hidden">
+584:<div id="ctab-cards" class="cust-tab hidden">
+589:<div id="ctab-history" class="cust-tab hidden">
+592:<div id="ctab-profile" class="cust-tab hidden">
+595:<div id="ctab-msg" class="cust-tab hidden">
+977:document.getElementById('ctab-'+tab).classList.remove('hidden');

@@ -1,0 +1,5 @@
+278:<div class="nav-item active" onclick="showAdminTab('overview')"><span class="icon">📊</span> Overview</div>
+279:<div class="nav-item" onclick="showAdminTab('customers')"><span class="icon">👥</span> Customers</div>
+280:<div class="nav-item" onclick="showAdminTab('accounts')"><span class="icon">💰</span> Accounts & Balance</div>
+281:<div class="nav-item" onclick="showAdminTab('transfers')"><span class="icon">🔄</span> Transfers</div>
+282:<div class="nav-item" onclick="showAdminTab('payments')"><span class="icon">💳</span> Payments</div>

@@ -1,0 +1,5 @@
+321:<div id="tab-customers" class="admin-tab hidden">
+324:<div id="tab-accounts" class="admin-tab hidden">
+329:<div id="custBalEditor" class="hidden">
+336:<div id="tab-transfers" class="admin-tab hidden">
+353:<div id="tab-payments" class="admin-tab hidden">

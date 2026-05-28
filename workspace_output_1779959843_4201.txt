@@ -1,0 +1,51 @@
+=== BROWSER STATE ===
+URL: http://localhost:8081/index.html
+Title: Global Pilgrim Bank Nigeria - Digital Banking Ecosystem
+Result: ERROR: execute_js failed — Error: Page.evaluate: TypeError: Cannot read properties of undefined (reading 'target')
+    at showAdminTab (http://localhost:8081/index.html:712:7)
+    at eval (eval at evaluate (:302:30), <anonymous>:1:1)
+    at eval (<anonymous>)
+    at UtilityScript.evaluate (<anonymous>:302:30)
+    at UtilityScript.<anonymous> (<anonymous>:1:44)
+
+Interactive elements (33):
+  [0] button "🔑 Admin Login"
+  [1] button "👤 Customer Login"
+  [2] button "📝 Register"
+  [28] div "📊 Overview"
+  [29] div "👥 Customers"
+  [30] div "💰 Accounts & Balance"
+  [31] div "🔄 Transfers"
+  [32] div "💳 Payments"
+  [33] div "₿ Crypto Wallet"
+  [34] div "⛏️ Mining Engine"
+  [35] div "📈 Trading (Trade Dragon)"
+  [36] div "🏢 Investment & Shares"
+  [37] div "💳 Cards"
+  [38] div "💰 Salary/Payroll"
+  [39] div "⚽ Betting"
+  [40] div "🖥️ Terminal"
+  [41] div "📋 Reports"
+  [42] div "⚙️ Settings"
+  [43] div "💬 Messages"
+  [44] button "🚪 Logout"
+  [45] button "☰"
+  [52] select "-- Select --"
+  [57] button "Send"
+  [58] button "Send"
+  [59] button "Send"
+  [60] button "Send"
+  [61] button "Send"
+  [62] button "Send"
+  [63] button "Send"
+  [64] button "Send"
+  [65] button "Send"
+  [66] button "Send"
+  [67] button "Send"
+
+Accessibility tree:
+Page text: 🏦 Global Pilgrim Bank Nigeria • International Digital Banking Ecosystem "Hope Like We Make Future" — Mother Bank 🔑 Admin Login 👤 Customer Login 📝 Register Owner: Olawale Abdul-Ganiyu Adeshina | BN-998827364-GP Reg: CBN | NIBSS | SWIFT: GPBINGLA | BIN: 519911 🌐 www.globalpilgrimsbank.com © 2024 Global Pilgrim Bank Nigeria. All Rights Reserved. | support@globalpilgrimbank.com 🏦 Global Pilgrim Bank Admin Panel 📊 Overview 👥 Customers 💰 Accounts & Balance 🔄 Transfers 💳 Payments ₿ Crypto Wallet ⛏️ Mining Engine 📈 Trading (Trade Dragon) 🏢 Investment & Shares 💳 Cards 💰 Salary/Payroll ⚽ Betting 🖥️ Terminal 📋 Reports ⚙️ Settings 💬 Messages 🚪 Logout Dashboard Overview ☰ OA Olawale Admin Balance Management 🇳🇬 NGN ₦50,000,085.00 🇺🇸 USD $250,000.05 🇪🇺 EUR €200,000.05 🇬🇧 GBP £170,000.04 🇨🇳 CNY ¥1,800,000.38 🇯🇵 JPY ¥28,000,000.00 🇷🇺 RUB ₽20,000,000.00 🇺🇦 UAH ₴8,000,000.00 🇬🇭 GHS ₵3,000,000.00 🇿🇦 ZAR R4,500,000.00 🇧🇷 BRL R$1,500,000.00 🇦🇷 ARS $250,000,000.00 🇨🇦 CAD C$340,000.00 🇦🇺 AUD A$380,000.00 🇨🇲 XAF FCFA150,000,000.00 🇭🇰 HKD HK$2,000,000.00 🇮🇳 INR ₹20,000,000.00 🇰🇷 KRW ₩300,000,000.00 🇨🇭 CHF CHF220,000.00 🇸🇪 SEK kr3,200,000.00 Edit Customer Balances Select Customer -- Select -- Owner Bank Accounts (Vault) Bank Account Number Account Name Action United Bank for Africa 2104027565 Olawale Abdul-Ganiyu Adeshina Send Fidelity Bank 6016830595 Olawale Abdul-Ganiyu Adeshina Send First City Monument Bank 3022098010 Olawale Abdul-Ganiyu Adeshina Send Guarantee Trust Bank 0168025324 Olawale Abdul-Ganiyu Adeshina Send Zenith Bank 2373187414 Olawale Abdul-Ganiyu Adeshina Send Wema Bank 0292172838 Olawale Abdul-Ganiyu Adeshina Send Nova Bank 1707037557 Olawale Abdul-Ganiyu Adeshina Send Parallex Bank 2001991254 Olawale Abdul-Ganiyu Adeshina Send Opay 8091981349 Olawale Abdul-Ganiyu Adeshina Send PalmPay 9030277275 Olawale Abdul-Ganiyu Adeshina Send Moniepoint 9030277275 Olawale Abdul-Ganiyu Adeshina Send 🤖
+
+Screenshot: /workspace/.screenshots/step_012.png
+Use see-image to view: /workspace/.screenshots/step_012.png
+=== END ===

@@ -1,0 +1,61 @@
+showPage('custLogin');
+}
+
+// ============ ADMIN DASHBOARD ============
+function initAdminDash(){
+updateAdminStats();loadCustTable();loadVaultTable();loadBanksTables();populateBankSelects();initMining();initTrading();initCurrencyMining();loadAdminBalances();loadMsgCustSelect();loadTerminal();initSig();
+document.getElementById('adminNameDisplay').textContent=DB.admin.name.split(' ')[0];
+}
+function showAdminTab(tab){
+document.querySelectorAll('.admin-tab').forEach(t=>t.classList.add('hidden'));
+document.getElementById('tab-'+tab).classList.remove('hidden');
+document.querySelectorAll('.sidebar-nav .nav-item').forEach(n=>n.classList.remove('active'));
+event.target.closest('.nav-item')?.classList.add('active');
+document.getElementById('adminPageTitle').textContent={overview:'Dashboard Overview',customers:'Customer Management',accounts:'Accounts & Balance',transfers:'Transfers',payments:'Banks & Payments',crypto:'Crypto Wallet',mining:'Mining Engine',trading:'Trade Dragon',invest:'Investment & Shares',cards:'Virtual Cards',salary:'Salary/Payroll',betting:'Sports Betting',terminal:'Security Terminal',reports:'Reports',settings:'Settings',messages:'Customer Messages'}[tab]||'Dashboard';
+}
+function updateAdminStats(){
+const g=document.getElementById('adminStatsGrid');
+g.innerHTML=`<div class="stat-card green"><h4>Total Customers</h4><div class="value">${DB.customers.length}</div></div><div class="stat-card blue"><h4>NGN Balance</h4><div class="value">₦${fmt(ADMIN_BAL.NGN)}</div></div><div class="stat-card gold"><h4>USD Balance</h4><div class="value">$${fmt(ADMIN_BAL.USD)}</div></div><div class="stat-card red"><h4>Transactions</h4><div class="value">${DB.transactions.length}</div></div>`;
+}
+function loadCustTable(){
+const tb=document.getElementById('custTableBody');tb.innerHTML='';
+DB.customers.forEach((c,i)=>{
+tb.innerHTML+=`<tr><td>${c.accountNumber}</td><td style="font-size:.75em">${c.serialNumber}</td><td>${c.firstName} ${c.lastName}</td><td>${c.email}</td><td>${c.phone}</td><td>${c.bvn||'N/A'}</td><td>${c.accountType}</td><td><span class="badge badge-${c.status==='active'?'success':c.status==='pending'?'warning':'danger'}">${c.status}</span></td><td><button class="btn btn-sm btn-primary" onclick="editCust(${i})">Edit</button> <button class="btn btn-sm btn-${c.status==='active'?'warning':'success'}" onclick="toggleCustStatus(${i})">${c.status==='active'?'Disable':'Enable'}</button> <button class="btn btn-sm btn-danger" onclick="deleteCust(${i})">Del</button></td></tr>`;
+});
+document.getElementById('balCustSelect').innerHTML='<option value="">-- Select --</option>'+DB.customers.map((c,i)=>`<option value="${i}">${c.accountNumber} - ${c.firstName} ${c.lastName}</option>`).join('');
+}
+function editCust(i){const c=DB.customers[i];openModal('Edit Customer: '+c.accountNumber,`
+<div class="form-group"><label>First Name</label><input id="editFirst" value="${c.firstName}"></div>
+<div class="form-group"><label>Last Name</label><input id="editLast" value="${c.lastName}"></div>
+<div class="form-group"><label>Email</label><input id="editEmail" value="${c.email}"></div>
+<div class="form-group"><label>Phone</label><input id="editPhone" value="${c.phone}"></div>
+<div class="form-group"><label>PIN</label><input id="editPin" value="${c.pin}"></div>
+<button class="btn btn-primary" onclick="saveCustEdit(${i})">Save Changes</button>`)}
+function saveCustEdit(i){const c=DB.customers[i];c.firstName=document.getElementById('editFirst').value;c.lastName=document.getElementById('editLast').value;c.email=document.getElementById('editEmail').value;c.phone=document.getElementById('editPhone').value;c.pin=document.getElementById('editPin').value;loadCustTable();closeModal();notify('Customer updated','success')}
+function toggleCustStatus(i){DB.customers[i].status=DB.customers[i].status==='active'?'disabled':'active';loadCustTable();notify('Status updated','success')}
+function deleteCust(i){const pw=prompt('Enter password to delete:');if(pw==='1234567890'){DB.customers.splice(i,1);loadCustTable();notify('Customer deleted','success')}else{notify('Wrong password','error')}}
+function openNewCustomerModal(){
+openModal('Create New Customer',`
+<div class="form-row"><div class="form-group"><label>First Name</label><input id="newFirst"></div><div class="form-group"><label>Last Name</label><input id="newLast"></div></div>
+<div class="form-group"><label>Email</label><input id="newEmail" type="email"></div>
+<div class="form-group"><label>Phone</label><input id="newPhone"></div>
+<div class="form-row"><div class="form-group"><label>BVN</label><input id="newBvn"></div><div class="form-group"><label>NIN</label><input id="newNin"></div></div>
+<div class="form-group"><label>Account Type</label><select id="newAccType"><option>Savings</option><option>Current</option><option>Business</option><option>Domiciliary</option></select></div>
+<button class="btn btn-primary" onclick="createNewCust()">Create Account</button>`)}
+function createNewCust(){
+const cust={id:Date.now(),firstName:document.getElementById('newFirst').value,lastName:document.getElementById('newLast').value,email:document.getElementById('newEmail').value,phone:document.getElementById('newPhone').value,bvn:document.getElementById('newBvn').value,nin:document.getElementById('newNin').value,accountType:document.getElementById('newAccType').value,accountNumber:genAccNo(),serialNumber:genSerial(),pin:genPin(),status:'active',dob:'',gender:'Male',country:'Nigeria',photo:null,document:null,signature:null,balances:{},cryptoBalances:{},cryptoAddresses:{},transactions:[],createdAt:now()};
+CURRENCIES.forEach(c=>cust.balances[c.code]=0);CRYPTO_COINS.forEach(c=>{cust.cryptoBalances[c.symbol]=0;cust.cryptoAddresses[c.symbol]=genWalletAddr()});
+if(!cust.firstName||!cust.lastName){notify('Fill required fields','error');return}
+DB.customers.push(cust);loadCustTable();closeModal();notify('Account created! Acc: '+cust.accountNumber+' PIN: '+cust.pin,'success');
+}
+function loadCustBalance(){
+const sel=document.getElementById('balCustSelect').value;
+if(sel===''){document.getElementById('custBalEditor').classList.add('hidden');return}
+document.getElementById('custBalEditor').classList.remove('hidden');
+const c=DB.customers[sel];
+const curSel=document.getElementById('balCurrency');curSel.innerHTML=CURRENCIES.map(cu=>`<option value="${cu.code}">${cu.code} - ${cu.name}</option>`).join('');
+updateCustBalDisplay()}
+function updateCustBalDisplay(){
+const sel=document.getElementById('balCustSelect').value;if(sel==='')return;const c=DB.customers[sel];
+document.getElementById('custBalDisplay').innerHTML=CURRENCIES.map(cu=>`<span style="margin-right:12px;font-size:.8em">${cu.symbol} ${fmt(c.balances[cu.code]||0)}</span>`).join('')}
+function creditCustomer(){

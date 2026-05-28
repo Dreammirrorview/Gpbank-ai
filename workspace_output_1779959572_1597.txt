@@ -1,0 +1,14 @@
+const amt=parseFloat(document.getElementById('withdAmt')?.value||0);
+if(isNaN(amt)||amt<=0){notify('Invalid amount','error');return}
+if(amt>DB.trading.profitBal){notify('Insufficient profit balance','error');return}
+DB.trading.profitBal-=amt;document.getElementById('tradeProfitBal').textContent='$'+fmt(DB.trading.profitBal);
+DB.transactions.push({ref:genTxRef(),type:'withdrawal',from:'Trade Dragon Profit',to:'Owner Bank Account',currency:'USD',amount:amt,status:'success',date:now()});
+closeModal();notify('Withdrawal of $'+fmt(amt)+' initiated','success')}
+
+function updateAdminSettings(){
+const u=document.getElementById('setAdminUser').value;const p=document.getElementById('setAdminPass').value;
+if(u)DB.admin.username=u;if(p)DB.admin.password=p;
+notify('Settings saved','success')}
+</script>
+</body>
+</html>

@@ -1,0 +1,428 @@
+<script src="https://sites.super.myninja.ai/_assets/ninja-daytona-script.js"></script>
+</head>
+<body>
+<!-- ========== COVER PAGE ========== -->
+<div id="coverPage" class="page active">
+<div class="cover-logo">🏦</div>
+<h1 class="cover-title">Global Pilgrim Bank</h1>
+<p class="cover-subtitle">Nigeria &bull; International Digital Banking Ecosystem</p>
+<p class="cover-tagline">"Hope Like We Make Future" — Mother Bank</p>
+<div class="cover-btns">
+<button class="btn btn-primary" onclick="showPage('adminLogin')">🔑 Admin Login</button>
+<button class="btn btn-gold" onclick="showPage('custLogin')">👤 Customer Login</button>
+<button class="btn btn-outline" onclick="showPage('custRegister')">📝 Register</button>
+</div>
+<p style="margin-top:30px;font-size:.8em;color:#888;z-index:1;text-align:center;max-width:500px">
+Owner: Olawale Abdul-Ganiyu Adeshina | BN-998827364-GP<br>
+Reg: CBN | NIBSS | SWIFT: GPBINGLA | BIN: 519911<br>
+🌐 www.globalpilgrimsbank.com
+</p>
+<div class="cover-footer">
+&copy; 2024 Global Pilgrim Bank Nigeria. All Rights Reserved. | support@globalpilgrimbank.com
+</div>
+</div>
+
+<!-- ========== ADMIN LOGIN ========== -->
+<div id="adminLogin" class="page">
+<div class="login-container">
+<div class="login-box">
+<h2>🏦 Admin Login</h2>
+<p>Global Pilgrim Bank — Administrator Access</p>
+<div class="form-group"><label>Username</label><input id="adminUser" placeholder="Enter admin username"></div>
+<div class="form-group"><label>Password</label><input id="adminPass" type="password" placeholder="Enter password"></div>
+<button class="btn btn-primary" style="width:100%" onclick="adminLogin()">Login</button>
+<div class="login-link"><a onclick="showPage('coverPage')">← Back to Home</a> &nbsp;|&nbsp; <a onclick="alert('Contact: adeganglobal@gmail.com')">Forgot Password?</a></div>
+</div>
+</div>
+</div>
+
+<!-- ========== CUSTOMER LOGIN ========== -->
+<div id="custLogin" class="page">
+<div class="login-container">
+<div class="login-box">
+<h2>👤 Customer Login</h2>
+<p>Access your Global Pilgrim Bank account</p>
+<div class="form-group"><label>Account Number</label><input id="custAccInput" placeholder="10-digit account number"></div>
+<div class="form-group"><label>PIN</label><input id="custPinInput" type="password" placeholder="Enter PIN"></div>
+<button class="btn btn-primary" style="width:100%" onclick="custLogin()">Login</button>
+<div class="login-link"><a onclick="showPage('coverPage')">← Back</a> &nbsp;|&nbsp; <a onclick="showPage('custRegister')">Register</a></div>
+</div>
+</div>
+</div>
+
+<!-- ========== CUSTOMER REGISTER ========== -->
+<div id="custRegister" class="page">
+<div class="login-container">
+<div class="login-box" style="max-width:550px">
+<h2>📝 Customer Registration</h2>
+<p>Admin-created accounts only. Contact admin at adeganglobal@gmail.com</p>
+<div class="form-row"><div class="form-group"><label>First Name</label><input id="regFirst" placeholder="First name"></div><div class="form-group"><label>Last Name</label><input id="regLast" placeholder="Last name"></div></div>
+<div class="form-row"><div class="form-group"><label>Date of Birth</label><input id="regDob" type="date"></div><div class="form-group"><label>Gender</label><select id="regGender"><option>Male</option><option>Female</option></select></div></div>
+<div class="form-group"><label>Email</label><input id="regEmail" type="email" placeholder="Email address"></div>
+<div class="form-group"><label>Phone Number</label><input id="regPhone" placeholder="+234..."></div>
+<div class="form-row"><div class="form-group"><label>NIN</label><input id="regNin" placeholder="National ID Number"></div><div class="form-group"><label>BVN</label><input id="regBvn" placeholder="Bank Verification Number"></div></div>
+<div class="form-group"><label>Country</label><select id="regCountry"><option>Nigeria</option><option>Ghana</option><option>South Africa</option><option>United States</option><option>United Kingdom</option><option>China</option><option>Russia</option><option>Ukraine</option><option>Japan</option><option>Brazil</option><option>Argentina</option><option>Canada</option><option>Australia</option><option>Cameroon</option><option>Hong Kong</option></select></div>
+<div class="form-group"><label>Account Type</label><select id="regAccType"><option>Savings</option><option>Current</option><option>Business</option><option>Domiciliary</option></select></div>
+<div class="form-group"><label>ID Document Photo</label><input id="regDocPhoto" type="file" accept="image/*"></div>
+<div class="form-group"><label>Passport Photo</label><input id="regPassport" type="file" accept="image/*"></div>
+<div class="form-group"><label>Signature</label><canvas id="sigCanvas" width="400" height="100" style="border:1px solid var(--border);border-radius:8px;background:var(--primary);width:100%;cursor:crosshair"></canvas>
+<button class="btn btn-sm btn-outline" onclick="clearSig()">Clear</button></div>
+<button class="btn btn-primary" style="width:100%" onclick="registerCustomer()">Submit Registration</button>
+<div class="login-link"><a onclick="showPage('coverPage')">← Back</a></div>
+</div>
+</div>
+</div>
+
+<!-- ========== ADMIN DASHBOARD ========== -->
+<div id="adminDash" class="page">
+<div class="dashboard">
+<aside class="sidebar" id="adminSidebar">
+<div class="sidebar-header">
+<div style="font-size:2em">🏦</div>
+<h3>Global Pilgrim Bank</h3>
+<small>Admin Panel</small>
+</div>
+<nav class="sidebar-nav">
+<div class="nav-item active" onclick="showAdminTab('overview')"><span class="icon">📊</span> Overview</div>
+<div class="nav-item" onclick="showAdminTab('customers')"><span class="icon">👥</span> Customers</div>
+<div class="nav-item" onclick="showAdminTab('accounts')"><span class="icon">💰</span> Accounts & Balance</div>
+<div class="nav-item" onclick="showAdminTab('transfers')"><span class="icon">🔄</span> Transfers</div>
+<div class="nav-item" onclick="showAdminTab('payments')"><span class="icon">💳</span> Payments</div>
+<div class="nav-item" onclick="showAdminTab('crypto')"><span class="icon">₿</span> Crypto Wallet</div>
+<div class="nav-item" onclick="showAdminTab('mining')"><span class="icon">⛏️</span> Mining Engine</div>
+<div class="nav-item" onclick="showAdminTab('trading')"><span class="icon">📈</span> Trading (Trade Dragon)</div>
+<div class="nav-item" onclick="showAdminTab('invest')"><span class="icon">🏢</span> Investment & Shares</div>
+<div class="nav-item" onclick="showAdminTab('cards')"><span class="icon">💳</span> Cards</div>
+<div class="nav-item" onclick="showAdminTab('salary')"><span class="icon">💰</span> Salary/Payroll</div>
+<div class="nav-item" onclick="showAdminTab('betting')"><span class="icon">⚽</span> Betting</div>
+<div class="nav-item" onclick="showAdminTab('terminal')"><span class="icon">🖥️</span> Terminal</div>
+<div class="nav-item" onclick="showAdminTab('reports')"><span class="icon">📋</span> Reports</div>
+<div class="nav-item" onclick="showAdminTab('settings')"><span class="icon">⚙️</span> Settings</div>
+<div class="nav-item" onclick="showAdminTab('messages')"><span class="icon">💬</span> Messages</div>
+</nav>
+<div class="sidebar-footer">
+<button class="btn btn-danger btn-sm" style="width:100%" onclick="logout()">🚪 Logout</button>
+</div>
+</aside>
+<main class="main-content">
+<div class="top-bar">
+<h2 id="adminPageTitle">Dashboard Overview</h2>
+<div class="top-bar-actions">
+<button class="btn btn-sm btn-outline" onclick="toggleSidebar()">☰</button>
+<div class="user-badge"><div class="avatar">OA</div><span id="adminNameDisplay">Admin</span></div>
+</div>
+</div>
+<!-- ADMIN TABS -->
+<div id="tab-overview" class="admin-tab">
+<div class="stats-grid" id="adminStatsGrid"></div>
+<div class="panel"><div class="panel-header"><h3>Quick Actions</h3></div><div class="panel-body">
+<div style="display:flex;gap:10px;flex-wrap:wrap">
+<button class="btn btn-primary btn-sm" onclick="showAdminTab('customers')">+ New Customer</button>
+<button class="btn btn-gold btn-sm" onclick="showAdminTab('transfers')">Send Money</button>
+<button class="btn btn-info btn-sm" onclick="showAdminTab('crypto')">Crypto Wallet</button>
+<button class="btn btn-sm btn-outline" onclick="showAdminTab('mining')">Start Mining</button>
+<button class="btn btn-sm btn-outline" onclick="showAdminTab('trading')">Trade</button>
+</div></div></div>
+<div class="panel"><div class="panel-header"><h3>Recent Transactions</h3></div><div class="panel-body no-pad"><div class="table-wrap"><table id="recentTxTable"><thead><tr><th>Ref</th><th>Type</th><th>From</th><th>To</th><th>Amount</th><th>Status</th><th>Date</th></tr></thead><tbody></tbody></table></div></div></div>
+<div class="panel"><div class="panel-header"><h3>Security Terminal</h3></div><div class="panel-body"><div class="terminal" id="securityTerminal"></div></div></div>
+</div>
+<div id="tab-customers" class="admin-tab hidden">
+<div class="panel"><div class="panel-header"><h3>Customer Management</h3><button class="btn btn-primary btn-sm" onclick="openNewCustomerModal()">+ New Customer</button></div><div class="panel-body no-pad"><div class="table-wrap"><table id="custTable"><thead><tr><th>Acc No</th><th>Serial</th><th>Name</th><th>Email</th><th>Phone</th><th>BVN</th><th>Type</th><th>Status</th><th>Actions</th></tr></thead><tbody id="custTableBody"></tbody></table></div></div></div>
+</div>
+<div id="tab-accounts" class="admin-tab hidden">
+<div class="panel"><div class="panel-header"><h3>Admin Balance Management</h3></div><div class="panel-body">
+<div class="stats-grid" id="adminBalanceGrid"></div>
+<h4 style="margin:16px 0 8px;color:var(--gold)">Edit Customer Balances</h4>
+<div class="form-group"><label>Select Customer</label><select id="balCustSelect" onchange="loadCustBalance()"><option value="">-- Select --</option></select></div>
+<div id="custBalEditor" class="hidden">
+<div class="form-row"><div class="form-group"><label>Currency</label><select id="balCurrency"></select></div><div class="form-group"><label>Amount</label><input id="balAmount" type="number" step="0.01"></div></div>
+<div style="display:flex;gap:8px"><button class="btn btn-primary btn-sm" onclick="creditCustomer()">+ Credit</button><button class="btn btn-danger btn-sm" onclick="debitCustomer()">- Debit</button></div>
+<div id="custBalDisplay" style="margin-top:12px"></div>
+</div></div></div>
+<div class="panel"><div class="panel-header"><h3>Owner Bank Accounts (Vault)</h3></div><div class="panel-body no-pad"><div class="table-wrap"><table><thead><tr><th>Bank</th><th>Account Number</th><th>Account Name</th><th>Action</th></tr></thead><tbody id="vaultTable"></tbody></table></div></div></div>
+</div>
+<div id="tab-transfers" class="admin-tab hidden">
+<div class="panel"><div class="panel-header"><h3>Local Transfer</h3></div><div class="panel-body">
+<div class="form-row"><div class="form-group"><label>Sender Account</label><select id="senderAccSelect"></select></div><div class="form-group"><label>Currency</label><select id="transferCurrency"><option value="NGN">NGN - Naira</option><option value="USD">USD - Dollar</option><option value="EUR">EUR - Euro</option><option value="GBP">GBP - Pound</option><option value="CNY">CNY - Yuan</option><option value="JPY">JPY - Yen</option><option value="RUB">RUB - Ruble</option><option value="UAH">UAH - Hryvnia</option><option value="GHS">GHS - Cedi</option><option value="ZAR">ZAR - Rand</option><option value="BRL">BRL - Real</option><option value="ARS">ARS - Peso</option><option value="CAD">CAD - Dollar</option><option value="AUD">AUD - Dollar</option><option value="CMR">XAF - CFA</option><option value="HKD">HKD - Dollar</option></select></div></div>
+<div class="form-row"><div class="form-group"><label>Receiver Bank</label><select id="receiverBankSelect" onchange="resolveBankName()"></select></div><div class="form-group"><label>Receiver Account Number</label><input id="receiverAccNum" placeholder="10-digit account" oninput="resolveBankName()"></div></div>
+<div class="form-group"><label>Receiver Name (auto-resolved)</label><input id="receiverName" placeholder="Will auto-fill" readonly style="color:var(--accent)"></div>
+<div class="form-row"><div class="form-group"><label>Amount</label><input id="transferAmount" type="number" step="0.01" placeholder="0.00"></div><div class="form-group"><label>Narration</label><input id="transferNarration" placeholder="Payment for..."></div></div>
+<button class="btn btn-primary" onclick="sendTransfer()">Send Transfer</button>
+<span style="margin-left:10px;font-size:.8em;color:#888">Signature: Global Pilgrim Bank | Olawale Abdul-Ganiyu Adeshina</span>
+</div></div>
+<div class="panel"><div class="panel-header"><h3>International Transfer (SWIFT)</h3></div><div class="panel-body">
+<div class="form-row"><div class="form-group"><label>SWIFT/BIC Code</label><input id="swiftCode" placeholder="e.g. GPBINGLA"></div><div class="form-group"><label>IBAN</label><input id="ibanInput" placeholder="International Bank Account Number"></div></div>
+<div class="form-row"><div class="form-group"><label>Beneficiary Name</label><input id="intlBenefName"></div><div class="form-group"><label>Beneficiary Address</label><input id="intlBenefAddr"></div></div>
+<div class="form-row"><div class="form-group"><label>Currency</label><select id="intlCurrency"><option>USD</option><option>EUR</option><option>GBP</option><option>NGN</option></select></div><div class="form-group"><label>Amount</label><input id="intlAmount" type="number"></div></div>
+<div class="form-group"><label>Purpose</label><input id="intlPurpose" placeholder="Purpose of transfer"></div>
+<button class="btn btn-gold" onclick="sendIntlTransfer()">Send via SWIFT</button>
+</div></div>
+</div>
+<div id="tab-payments" class="admin-tab hidden">
+<div class="panel"><div class="panel-header"><h3>Nigerian Commercial Banks</h3></div><div class="panel-body no-pad"><div class="table-wrap"><table><thead><tr><th>Bank Name</th><th>Code</th><th>SWIFT</th><th>Type</th></tr></thead><tbody id="commBankTable"></tbody></table></div></div></div>
+<div class="panel"><div class="panel-header"><h3>Nigerian Microfinance Banks</h3></div><div class="panel-body no-pad"><div class="table-wrap"><table><thead><tr><th>Bank Name</th><th>Code</th><th>Type</th></tr></thead><tbody id="mfbBankTable"></tbody></table></div></div></div>
+<div class="panel"><div class="panel-header"><h3>Payment to Microfinance</h3></div><div class="panel-body">
+<div class="form-row"><div class="form-group"><label>Bank</label><select id="mfbPaySelect"></select></div><div class="form-group"><label>Account Number</label><input id="mfbPayAccNum" placeholder="Account number"></div></div>
+<div class="form-row"><div class="form-group"><label>Account Name</label><input id="mfbPayName"></div><div class="form-group"><label>Amount (NGN)</label><input id="mfbPayAmount" type="number"></div></div>
+<button class="btn btn-primary btn-sm" onclick="sendMfbPayment()">Send Payment</button>
+</div></div>
+</div>
+<div id="tab-crypto" class="admin-tab hidden">
+<div class="panel"><div class="panel-header"><h3>Crypto Wallet Dashboard</h3><button class="btn btn-sm btn-outline" onclick="generateAllWallets()">🔄 Generate Wallets</button></div><div class="panel-body">
+<div class="stats-grid" id="cryptoBalanceGrid"></div>
+</div></div>
+<div class="panel"><div class="panel-header"><h3>Send Crypto</h3></div><div class="panel-body">
+<div class="form-row"><div class="form-group"><label>Coin</label><select id="cryptoSendCoin"></select></div><div class="form-group"><label>Amount</label><input id="cryptoSendAmount" type="number" step="0.00000001"></div></div>
+<div class="form-group"><label>Destination Wallet Address</label><input id="cryptoSendAddr" placeholder="0x..."></div>
+<div class="form-group"><label>Your Wallet Address</label><input id="cryptoFromAddr" readonly style="color:var(--accent)"></div>
+<button class="btn btn-primary btn-sm" onclick="sendCrypto()">Send</button>
+</div></div>
+<div class="panel"><div class="panel-header"><h3>Receive Crypto</h3></div><div class="panel-body">
+<div class="form-group"><label>Coin</label><select id="cryptoRecvCoin" onchange="showRecvAddr()"></select></div>
+<div class="form-group"><label>Receiving Address</label><input id="cryptoRecvAddr" readonly style="color:var(--gold);font-family:monospace;font-size:.9em"></div>
+<button class="btn btn-sm btn-outline" onclick="copyRecvAddr()">📋 Copy Address</button>
+</div></div>
+<div class="panel"><div class="panel-header"><h3>Convert / Swap</h3></div><div class="panel-body">
+<div class="form-row"><div class="form-group"><label>From</label><select id="swapFrom"></select></div><div class="form-group"><label>To</label><select id="swapTo"></select></div></div>
+<div class="form-group"><label>Amount</label><input id="swapAmount" type="number" step="0.01"></div>
+<button class="btn btn-gold btn-sm" onclick="swapCrypto()">Swap</button>
+</div></div>
+</div>
+<div id="tab-mining" class="admin-tab hidden">
+<div class="panel"><div class="panel-header"><h3>⛏️ Mining Engine</h3><div><button class="btn btn-primary btn-sm" onclick="startAllMining()">▶ Start All</button> <button class="btn btn-danger btn-sm" onclick="stopAllMining()">⏹ Stop All</button></div></div><div class="panel-body">
+<div class="form-group"><label>Mining Interval</label><select id="miningSpeed"><option value="3600000">1 Hour</option><option value="60000" selected>1 Minute (Demo)</option><option value="10000">10 Seconds (Fast)</option></select></div>
+<div id="miningCardsContainer"></div>
+</div></div>
+<div class="panel"><div class="panel-header"><h3>Currency Mining</h3></div><div class="panel-body"><div id="currencyMiningContainer"></div></div></div>
+</div>
+<div id="tab-trading" class="admin-tab hidden">
+<div class="panel"><div class="panel-header"><h3>📈 Trade Dragon — Trading Platform</h3><small>Owner: Olawale Abdul-Ganiyu | adegan95@yahoo.com</small></div><div class="panel-body">
+<div class="trade-container">
+<div class="chart-area">
+<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px">
+<div class="trade-pair" id="tradePairDisplay">EUR/USD</div>
+<div><select id="tradePairSelect" onchange="changeTradePair()"><option>EUR/USD</option><option>GBP/USD</option><option>USD/JPY</option><option>BTC/USD</option><option>ETH/USD</option><option>PILGRIM/USD</option><option>USD/NGN</option><option>XAU/USD</option></select></div>
+</div>
+<div class="price-display" id="tradePrice">1.08560</div>
+<div id="tradeChart" class="candle-chart"></div>
+<div style="margin-top:10px;display:flex;gap:8px;flex-wrap:wrap">
+<button class="btn btn-sm btn-outline" onclick="toggleAutoTrade()" id="autoTradeBtn">🤖 Auto Trade: OFF</button>
+<span style="font-size:.8em;color:#888">Buy: <span id="buyPrice">1.0855</span> | Sell: <span id="sellPrice">1.0856</span></span>
+</div>
+</div>
+<div class="trade-panel">
+<h4 style="color:var(--gold);margin-bottom:12px">Trade Panel</h4>
+<div class="form-group"><label>Lot Size</label><input id="lotSize" type="number" value="0.01" step="0.01" min="0.01"></div>
+<div class="form-group"><label>Leverage</label><select id="leverage"><option>1:100</option><option>1:200</option><option selected>1:500</option><option>1:1000</option></select></div>
+<div class="trade-btns">
+<button class="trade-btn-buy" onclick="placeTrade('BUY')">BUY ▲</button>
+<button class="trade-btn-sell" onclick="placeTrade('SELL')">SELL ▼</button>
+</div>
+<div style="margin-top:12px">
+<h5 style="color:var(--accent);font-size:.85em">Balances</h5>
+<p style="font-size:.8em">Main: <span id="tradeMainBal">$10,000.00</span></p>
+<p style="font-size:.8em">Profit: <span id="tradeProfitBal" style="color:var(--success)">$0.00</span></p>
+<div style="margin-top:8px;display:flex;gap:6px">
+<button class="btn btn-sm btn-outline" onclick="moveProfitToMain()">Profit→Main</button>
+<button class="btn btn-sm btn-outline" onclick="withdrawProfit()">Withdraw</button>
+</div>
+</div>
+<div style="margin-top:12px">
+<h5 style="color:var(--accent);font-size:.85em">Open Positions</h5>
+<div id="openPositions" style="font-size:.8em;max-height:150px;overflow-y:auto"></div>
+</div>
+</div>
+</div>
+</div></div>
+</div>
+<div id="tab-invest" class="admin-tab hidden">
+<div class="panel"><div class="panel-header"><h3>🏢 Pilgrim Investment & Shares</h3></div><div class="panel-body">
+<p style="margin-bottom:16px;color:#888">Investment period: 5 years (renewable). Choose Share or Investment below.</p>
+<div class="form-group"><label>Type</label><select id="investType"><option>Investment</option><option>Shares</option></select></div>
+<div class="form-group"><label>Amount</label><input id="investAmount" type="number" placeholder="Enter amount"></div>
+<div class="form-group"><label>Currency</label><select id="investCurrency"><option>NGN</option><option>USD</option><option>EUR</option><option>GBP</option><option>Pilgrim Coin</option></select></div>
+<p style="font-size:.85em;color:var(--gold);margin:10px 0">After registration, contact admin via email:</p>
+<a href="mailto:adeganglobal@gmail.com?subject=Pilgrim Investment/Shares Registration" class="btn btn-gold btn-sm" style="text-decoration:none">📧 adeganglobal@gmail.com</a>
+<a href="mailto:pilgrimshares@gmail.com?subject=Pilgrim Shares Registration" class="btn btn-primary btn-sm" style="text-decoration:none;margin-left:8px">📧 pilgrimshares@gmail.com</a>
+<a href="mailto:adeganglobalbank@gmail.com?subject=Global Pilgrim Bank Investment" class="btn btn-info btn-sm" style="text-decoration:none;margin-left:8px">📧 adeganglobalbank@gmail.com</a>
+<button class="btn btn-primary" style="margin-top:16px" onclick="submitInvestment()">Submit Registration</button>
+</div></div>
+</div>
+<div id="tab-cards" class="admin-tab hidden">
+<div class="panel"><div class="panel-header"><h3>💳 Virtual ATM Cards</h3></div><div class="panel-body">
+<div style="display:flex;gap:20px;flex-wrap:wrap">
+<div class="atm-card pilgrim"><div class="card-type">Pilgrim Card</div><div class="card-chip"></div><div class="card-number">5199 1111 2368 4768</div><div class="card-details"><div><div style="font-size:.6em">CARD HOLDER</div><div class="card-holder" id="cardHolderName">OLAWALE A. ADESHINA</div></div><div><div style="font-size:.6em">EXPIRES</div><div>12/28</div></div></div><div class="card-brand">MASTERCARD</div></div>
+<div class="atm-card visa"><div class="card-type">Visa</div><div class="card-chip"></div><div class="card-number">4682 1903 0334 2014</div><div class="card-details"><div><div style="font-size:.6em">CARD HOLDER</div><div class="card-holder">OLAWALE A. ADESHINA</div></div><div><div style="font-size:.6em">EXPIRES</div><div>12/28</div></div></div><div class="card-brand">VISA</div></div>
+<div class="atm-card verve"><div class="card-type">Verve</div><div class="card-chip"></div><div class="card-number">5078 7230 1007 4501</div><div class="card-details"><div><div style="font-size:.6em">CARD HOLDER</div><div class="card-holder">OLAWALE A. ADESHINA</div></div><div><div style="font-size:.6em">EXPIRES</div><div>12/28</div></div></div><div class="card-brand">VERVE</div></div>
+</div>
+<div style="margin-top:16px">
+<h4 style="color:var(--gold);margin-bottom:8px">Card Details</h4>
+<div class="form-row"><div class="form-group"><label>CVV</label><input value="***" readonly></div><div class="form-group"><label>Card Status</label><select><option>Active</option><option>Frozen</option></select></div></div>
+<p style="font-size:.8em;color:#888">Linked to Global Pilgrim Bank account. Accepted worldwide on Mastercard/Visa/Verve networks.</p>
+</div>
+</div></div>
+</div>
+<div id="tab-salary" class="admin-tab hidden">
+<div class="panel"><div class="panel-header"><h3>💰 Salary / Payroll Database</h3><button class="btn btn-primary btn-sm" onclick="addDepartment()">+ Add Department</button></div><div class="panel-body">
+<div id="deptContainer"></div>
+<div style="margin-top:16px;display:flex;gap:8px;flex-wrap:wrap">
+<button class="btn btn-primary btn-sm" onclick="payAllSalary()">💸 Pay All</button>
+<input id="salarySearch" placeholder="Search name/phone/email" oninput="searchSalary()" style="padding:8px;background:var(--primary);border:1px solid var(--border);border-radius:6px;color:var(--text);font-size:.85em">
+</div>
+</div></div>
+</div>
+<div id="tab-betting" class="admin-tab hidden">
+<div class="panel"><div class="panel-header"><h3>⚽ Sports Betting</h3></div><div class="panel-body">
+<div class="form-group"><label>League</label><select id="betLeague" onchange="loadMatches()"><option>EPL - English Premier League</option><option>La Liga - Spanish League</option><option>Serie A - Italian League</option><option>Bundesliga - German League</option><option>Ligue 1 - French League</option><option>NPFL - Nigerian League</option><option>AFCON - Africa Cup of Nations</option><option>FIFA World Cup</option><option>Champions League</option><option>Europa League</option></select></div>
+<div id="matchesContainer"></div>
+<div class="form-group" style="margin-top:12px"><label>Bet Amount (NGN)</label><input id="betAmount" type="number" value="100" min="5"></div>
+<button class="btn btn-gold btn-sm" onclick="placeBet()">Place Bet</button>
+<p style="font-size:.75em;color:#888;margin-top:8px">Powered by Global Pilgrim Bank | Bet9ja/MSport/SportyBet integration</p>
+</div></div>
+</div>
+<div id="tab-terminal" class="admin-tab hidden">
+<div class="panel"><div class="panel-header"><h3>🖥️ Security & Network Terminal</h3><button class="btn btn-sm btn-outline" onclick="scanNetwork()">🔍 Scan</button></div><div class="panel-body">
+<div class="terminal" id="mainTerminal" style="min-height:350px"></div>
+<div style="margin-top:12px;display:flex;gap:8px;flex-wrap:wrap">
+<button class="btn btn-sm btn-outline" onclick="scanNetwork()">Scan Network</button>
+<button class="btn btn-sm btn-danger" onclick="voltageAction()">⚡ Voltage Action</button>
+<button class="btn btn-sm btn-info" onclick="showConnections()">Show Connections</button>
+</div>
+<div style="margin-top:12px">
+<h4 style="color:var(--gold);font-size:.9em">Network Info</h4>
+<div id="networkInfo" style="font-size:.8em;color:#888"></div>
+</div>
+</div></div>
+</div>
+<div id="tab-reports" class="admin-tab hidden">
+<div class="panel"><div class="panel-header"><h3>📋 Reports & Statements</h3></div><div class="panel-body">
+<div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:16px">
+<button class="btn btn-sm btn-primary" onclick="genStatement()">📄 Account Statement</button>
+<button class="btn btn-sm btn-gold" onclick="genTxReport()">📊 Transaction Report</button>
+<button class="btn btn-sm btn-info" onclick="exportPDF()">📥 Export PDF</button>
+</div>
+<div id="reportOutput"></div>
+</div></div>
+</div>
+<div id="tab-settings" class="admin-tab hidden">
+<div class="panel"><div class="panel-header"><h3>⚙️ Settings</h3></div><div class="panel-body">
+<div class="form-group"><label>Admin Username</label><input id="setAdminUser" value="Olawaleglobalpilgrim"></div>
+<div class="form-group"><label>Change Password</label><input id="setAdminPass" type="password" placeholder="New password"></div>
+<button class="btn btn-primary btn-sm" onclick="updateAdminSettings()">Save</button>
+<h4 style="color:var(--gold);margin:20px 0 10px">Bank Information</h4>
+<p style="font-size:.85em;line-height:1.8">
+<strong>Bank Name:</strong> Global Pilgrim Bank Nigeria<br>
+<strong>Registration:</strong> BN-998827364-GP<br>
+<strong>SWIFT:</strong> GPBINGLA<br>
+<strong>BIN:</strong> 519911 / 468219 / 507872<br>
+<strong>NIBSS Code:</strong> 999GPB<br>
+<strong>CBN License:</strong> Active<br>
+<strong>USSD:</strong> *7001#<br>
+<strong>Owner:</strong> Olawale Abdul-Ganiyu Adeshina<br>
+<strong>NIN:</strong> 87142812384 | <strong>BVN:</strong> 22203477535<br>
+<strong>Phone:</strong> +2349030277275<br>
+<strong>Email:</strong> adeganglobal@gmail.com<br>
+<strong>Address:</strong> Ogun State / Lagos Office, Nigeria<br>
+<strong>Website:</strong> www.globalpilgrimsbank.com<br>
+<strong>Support:</strong> support@globalpilgrimbank.com | support@globalpilgrimsbank.com<br>
+<strong>Admin:</strong> admin@globalpilgrimsbank.com | global@pilgrims.com
+</p>
+<div class="signature-stamp">
+<strong>Global Pilgrim Bank</strong><br>
+Original — Adegan — International<br>
+Olawale Abdul-Ganiyu Adeshina
+</div>
+</div></div>
+</div>
+<div id="tab-messages" class="admin-tab hidden">
+<div class="panel"><div class="panel-header"><h3>💬 Customer Messages</h3></div><div class="panel-body">
+<div id="msgList" style="max-height:400px;overflow-y:auto"></div>
+<div class="form-group" style="margin-top:12px"><label>Reply to Customer</label><textarea id="adminReply" placeholder="Type your reply..."></textarea></div>
+<div class="form-group"><label>Customer</label><select id="msgCustSelect"></select></div>
+<button class="btn btn-primary btn-sm" onclick="sendAdminMsg()">Send Reply</button>
+</div></div>
+</div>
+</main>
+</div>
+</div>
+
+<!-- ========== CUSTOMER DASHBOARD ========== -->
+<div id="custDash" class="page">
+<div class="dashboard">
+<aside class="sidebar" id="custSidebar">
+<div class="sidebar-header">
+<div style="font-size:2em">👤</div>
+<h3>Global Pilgrim Bank</h3>
+<small id="custDashName">Customer</small>
+</div>
+<nav class="sidebar-nav">
+<div class="nav-item active" onclick="showCustTab('c-overview')"><span class="icon">📊</span> My Dashboard</div>
+<div class="nav-item" onclick="showCustTab('c-accounts')"><span class="icon">💰</span> My Accounts</div>
+<div class="nav-item" onclick="showCustTab('c-transfer')"><span class="icon">🔄</span> Transfer</div>
+<div class="nav-item" onclick="showCustTab('c-crypto')"><span class="icon">₿</span> Crypto</div>
+<div class="nav-item" onclick="showCustTab('c-cards')"><span class="icon">💳</span> My Card</div>
+<div class="nav-item" onclick="showCustTab('c-history')"><span class="icon">📋</span> History</div>
+<div class="nav-item" onclick="showCustTab('c-profile')"><span class="icon">👤</span> Profile</div>
+<div class="nav-item" onclick="showCustTab('c-msg')"><span class="icon">💬</span> Message Admin</div>
+</nav>
+<div class="sidebar-footer">
+<button class="btn btn-danger btn-sm" style="width:100%" onclick="logout()">🚪 Logout</button>
+</div>
+</aside>
+<main class="main-content">
+<div class="top-bar"><h2 id="custPageTitle">My Dashboard</h2><div class="top-bar-actions"><button class="btn btn-sm btn-outline" onclick="toggleCustSidebar()">☰</button><div class="user-badge"><div class="avatar" id="custAvatar">C</div><span id="custDashAcc">0000000000</span></div></div></div>
+<div id="ctab-overview" class="cust-tab">
+<div class="stats-grid" id="custStatsGrid"></div>
+<div class="panel"><div class="panel-header"><h3>Recent Activity</h3></div><div class="panel-body no-pad"><div class="table-wrap"><table><thead><tr><th>Date</th><th>Type</th><th>Amount</th><th>Status</th></tr></thead><tbody id="custRecentTx"></tbody></table></div></div></div>
+</div>
+<div id="ctab-accounts" class="cust-tab hidden">
+<div class="stats-grid" id="custBalGrid"></div>
+</div>
+<div id="ctab-transfer" class="cust-tab hidden">
+<div class="panel"><div class="panel-header"><h3>Send Money</h3></div><div class="panel-body">
+<div class="form-row"><div class="form-group"><label>Bank</label><select id="custSendBank"></select></div><div class="form-group"><label>Account Number</label><input id="custSendAcc" placeholder="10-digit"></div></div>
+<div class="form-row"><div class="form-group"><label>Amount</label><input id="custSendAmt" type="number"></div><div class="form-group"><label>Currency</label><select id="custSendCur"><option>NGN</option><option>USD</option><option>EUR</option><option>GBP</option></select></div></div>
+<div class="form-group"><label>Narration</label><input id="custSendNarr" placeholder="Purpose"></div>
+<button class="btn btn-primary" onclick="custSendMoney()">Send</button>
+</div></div>
+</div>
+<div id="ctab-crypto" class="cust-tab hidden">
+<div class="panel"><div class="panel-header"><h3>My Crypto Wallet</h3></div><div class="panel-body"><div class="stats-grid" id="custCryptoGrid"></div></div></div>
+</div>
+<div id="ctab-cards" class="cust-tab hidden">
+<div class="panel"><div class="panel-header"><h3>My Card</h3></div><div class="panel-body">
+<div id="custCardDisplay"></div>
+</div></div>
+</div>
+<div id="ctab-history" class="cust-tab hidden">
+<div class="panel"><div class="panel-header"><h3>Transaction History</h3></div><div class="panel-body no-pad"><div class="table-wrap"><table><thead><tr><th>Date</th><th>Ref</th><th>Type</th><th>Amount</th><th>Status</th></tr></thead><tbody id="custHistoryTable"></tbody></table></div></div></div>
+</div>
+<div id="ctab-profile" class="cust-tab hidden">
+<div class="panel"><div class="panel-header"><h3>My Profile</h3></div><div class="panel-body"><div id="custProfileInfo"></div></div></div>
+</div>
+<div id="ctab-msg" class="cust-tab hidden">
+<div class="panel"><div class="panel-header"><h3>Message Admin</h3></div><div class="panel-body">
+<div id="custMsgList" style="max-height:300px;overflow-y:auto;margin-bottom:12px"></div>
+<div class="form-group"><textarea id="custMsgInput" placeholder="Type your message..."></textarea></div>
+<button class="btn btn-primary btn-sm" onclick="sendCustMsg()">Send</button>
+</div></div>
+</div>
+</main>
+</div>
+</div>
+
+<!-- ========== MODALS ========== -->
+<div class="modal-overlay" id="modalOverlay">
+<div class="modal">
+<span class="close-modal" onclick="closeModal()">&times;</span>
+<h3 id="modalTitle">Modal</h3>
+<div id="modalBody"></div>
+</div>
+</div>
+
+<!-- CHAT ROBOT -->
+<div class="chat-fab" onclick="toggleChat()">🤖</div>
+<div class="chat-window" id="chatWindow">
+<div class="chat-header"><h4>🤖 GPB Assistant</h4><span onclick="toggleChat()" style="cursor:pointer">&times;</span></div>
+<div class="chat-messages" id="chatMessages"></div>
+<div class="chat-input-area"><input id="chatInput" placeholder="Ask me anything..." onkeydown="if(event.key==='Enter')sendChat()"><button onclick="sendChat()">Send</button></div>

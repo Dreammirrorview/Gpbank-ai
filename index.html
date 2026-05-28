@@ -1,0 +1,1084 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Global Pilgrim Bank Nigeria - Digital Banking Ecosystem</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🏦</text></svg>">
+<style>
+:root{--primary:#0a1628;--secondary:#1a3a5c;--accent:#00d4aa;--gold:#ffd700;--danger:#ff4757;--success:#2ed573;--warning:#ffa502;--info:#1e90ff;--light:#f5f6fa;--dark:#2f3542;--card:#16213e;--text:#ecf0f1;--border:#2d3f5e;--gradient:linear-gradient(135deg,#0a1628 0%,#1a3a5c 50%,#0a1628 100%)}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'Segoe UI',Tahoma,Geneva,Verdana,sans-serif;background:var(--primary);color:var(--text);overflow-x:hidden}
+.page{display:none;min-height:100vh}
+.page.active{display:block}
+/* COVER PAGE */
+#coverPage{background:var(--gradient);display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:100vh;position:relative;overflow:hidden}
+#coverPage::before{content:'';position:absolute;width:200%;height:200%;background:radial-gradient(circle at 30% 50%,rgba(0,212,170,.1) 0%,transparent 50%),radial-gradient(circle at 70% 80%,rgba(255,215,0,.1) 0%,transparent 50%);animation:rotateBg 20s linear infinite}
+@keyframes rotateBg{from{transform:rotate(0deg)}to{transform:rotate(360deg)}}
+.cover-logo{width:120px;height:120px;border-radius:50%;background:linear-gradient(135deg,var(--accent),var(--gold));display:flex;align-items:center;justify-content:center;font-size:60px;margin-bottom:20px;z-index:1;box-shadow:0 0 40px rgba(0,212,170,.5)}
+.cover-title{font-size:2.5em;font-weight:700;text-align:center;z-index:1;background:linear-gradient(to right,var(--accent),var(--gold));-webkit-background-clip:text;-webkit-text-fill-color:transparent;margin-bottom:5px}
+.cover-subtitle{font-size:1.1em;color:var(--gold);z-index:1;margin-bottom:5px;text-align:center}
+.cover-tagline{font-size:.9em;color:var(--accent);z-index:1;margin-bottom:30px;font-style:italic;text-align:center}
+.cover-btns{display:flex;gap:15px;z-index:1;flex-wrap:wrap;justify-content:center}
+.btn{padding:12px 30px;border:none;border-radius:8px;cursor:pointer;font-size:1em;font-weight:600;transition:all .3s;text-decoration:none;display:inline-flex;align-items:center;gap:8px}
+.btn-primary{background:linear-gradient(135deg,var(--accent),#00b894);color:#000}
+.btn-primary:hover{transform:translateY(-2px);box-shadow:0 5px 20px rgba(0,212,170,.4)}
+.btn-gold{background:linear-gradient(135deg,var(--gold),#f0c040);color:#000}
+.btn-gold:hover{transform:translateY(-2px);box-shadow:0 5px 20px rgba(255,215,0,.4)}
+.btn-danger{background:linear-gradient(135deg,var(--danger),#e84393);color:#fff}
+.btn-info{background:linear-gradient(135deg,var(--info),#6c5ce7);color:#fff}
+.btn-sm{padding:6px 14px;font-size:.85em;border-radius:6px}
+.btn-outline{background:transparent;border:2px solid var(--accent);color:var(--accent)}
+.btn-outline:hover{background:var(--accent);color:#000}
+.cover-footer{position:absolute;bottom:20px;text-align:center;font-size:.75em;color:#666;z-index:1}
+/* LOGIN */
+.login-container{background:var(--gradient);display:flex;align-items:center;justify-content:center;min-height:100vh;padding:20px}
+.login-box{background:var(--card);border-radius:16px;padding:40px;width:100%;max-width:420px;border:1px solid var(--border);box-shadow:0 20px 60px rgba(0,0,0,.5)}
+.login-box h2{text-align:center;margin-bottom:8px;color:var(--accent)}
+.login-box p{text-align:center;margin-bottom:25px;color:#999;font-size:.9em}
+.form-group{margin-bottom:18px}
+.form-group label{display:block;margin-bottom:6px;font-size:.85em;color:#bbb}
+.form-group input,.form-group select,.form-group textarea{width:100%;padding:12px 16px;background:var(--primary);border:1px solid var(--border);border-radius:8px;color:var(--text);font-size:1em;transition:border-color .3s}
+.form-group input:focus,.form-group select:focus,.form-group textarea:focus{outline:none;border-color:var(--accent)}
+.form-group textarea{resize:vertical;min-height:80px}
+.form-row{display:flex;gap:12px}
+.form-row .form-group{flex:1}
+.login-link{text-align:center;margin-top:15px;font-size:.85em}
+.login-link a{color:var(--accent);cursor:pointer;text-decoration:none}
+.login-link a:hover{text-decoration:underline}
+/* DASHBOARD LAYOUT */
+.dashboard{display:flex;min-height:100vh}
+.sidebar{width:260px;background:var(--card);border-right:1px solid var(--border);display:flex;flex-direction:column;position:fixed;height:100vh;overflow-y:auto;z-index:100;transition:transform .3s}
+.sidebar-header{padding:20px;text-align:center;border-bottom:1px solid var(--border)}
+.sidebar-header h3{color:var(--accent);font-size:1em}
+.sidebar-header small{color:#888;font-size:.75em}
+.sidebar-nav{flex:1;padding:10px 0}
+.nav-item{padding:12px 20px;cursor:pointer;display:flex;align-items:center;gap:10px;transition:all .2s;font-size:.9em;color:#bbb;border-left:3px solid transparent}
+.nav-item:hover,.nav-item.active{background:rgba(0,212,170,.1);color:var(--accent);border-left-color:var(--accent)}
+.nav-item .icon{width:20px;text-align:center}
+.sidebar-footer{padding:15px 20px;border-top:1px solid var(--border)}
+.main-content{flex:1;margin-left:260px;padding:20px}
+.top-bar{display:flex;justify-content:space-between;align-items:center;padding:15px 20px;background:var(--card);border-radius:12px;margin-bottom:20px;border:1px solid var(--border)}
+.top-bar h2{font-size:1.2em;color:var(--accent)}
+.top-bar-actions{display:flex;gap:10px;align-items:center}
+.user-badge{display:flex;align-items:center;gap:8px;padding:6px 12px;background:var(--primary);border-radius:20px;font-size:.85em}
+.user-badge .avatar{width:30px;height:30px;border-radius:50%;background:var(--accent);display:flex;align-items:center;justify-content:center;font-size:.8em;color:#000;font-weight:700}
+/* CARDS */
+.stats-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:16px;margin-bottom:20px}
+.stat-card{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:20px;position:relative;overflow:hidden}
+.stat-card::after{content:'';position:absolute;top:0;right:0;width:80px;height:80px;border-radius:0 0 0 80px;opacity:.1}
+.stat-card.green::after{background:var(--success)}
+.stat-card.blue::after{background:var(--info)}
+.stat-card.gold::after{background:var(--gold)}
+.stat-card.red::after{background:var(--danger)}
+.stat-card h4{font-size:.8em;color:#888;margin-bottom:8px;text-transform:uppercase;letter-spacing:1px}
+.stat-card .value{font-size:1.6em;font-weight:700;color:var(--accent)}
+.stat-card .sub{font-size:.75em;color:#666;margin-top:4px}
+/* PANELS */
+.panel{background:var(--card);border:1px solid var(--border);border-radius:12px;margin-bottom:20px;overflow:hidden}
+.panel-header{padding:16px 20px;border-bottom:1px solid var(--border);display:flex;justify-content:space-between;align-items:center}
+.panel-header h3{font-size:1em;color:var(--accent)}
+.panel-body{padding:20px}
+.panel-body.no-pad{padding:0}
+/* TABLES */
+.table-wrap{overflow-x:auto}
+table{width:100%;border-collapse:collapse}
+th,td{padding:10px 14px;text-align:left;font-size:.85em;border-bottom:1px solid var(--border)}
+th{background:var(--primary);color:var(--accent);font-weight:600;position:sticky;top:0}
+tr:hover{background:rgba(0,212,170,.05)}
+.badge{padding:3px 10px;border-radius:12px;font-size:.75em;font-weight:600}
+.badge-success{background:rgba(46,213,115,.2);color:var(--success)}
+.badge-danger{background:rgba(255,71,87,.2);color:var(--danger)}
+.badge-warning{background:rgba(255,165,2,.2);color:var(--warning)}
+.badge-info{background:rgba(30,144,255,.2);color:var(--info)}
+/* TABS */
+.tabs{display:flex;gap:2px;background:var(--primary);padding:4px;border-radius:8px;margin-bottom:16px;overflow-x:auto;flex-wrap:nowrap}
+.tab{padding:8px 16px;cursor:pointer;border-radius:6px;font-size:.8em;white-space:nowrap;transition:all .2s;color:#888}
+.tab.active{background:var(--accent);color:#000;font-weight:600}
+.tab:hover:not(.active){color:var(--text)}
+/* MINING */
+.mining-card{background:linear-gradient(135deg,#1a1a2e,#16213e);border:1px solid var(--border);border-radius:12px;padding:16px;margin-bottom:12px;display:flex;justify-content:space-between;align-items:center}
+.mining-info h4{color:var(--gold);font-size:.9em}
+.mining-info .progress-text{font-size:.8em;color:#888;margin-top:4px}
+.mining-bar{width:200px;height:8px;background:var(--primary);border-radius:4px;overflow:hidden;margin-top:6px}
+.mining-bar .fill{height:100%;background:linear-gradient(90deg,var(--accent),var(--gold));border-radius:4px;transition:width .5s}
+.mining-status{font-size:.75em;padding:4px 10px;border-radius:12px}
+.mining-status.active{background:rgba(46,213,115,.2);color:var(--success)}
+.mining-status.paused{background:rgba(255,165,2,.2);color:var(--warning)}
+/* TRADING */
+.trade-container{display:grid;grid-template-columns:1fr 300px;gap:16px}
+.chart-area{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:16px;min-height:400px}
+.trade-panel{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:16px}
+.trade-pair{font-size:1.2em;font-weight:700;color:var(--gold);margin-bottom:12px}
+.price-display{font-size:2em;font-weight:700;margin:10px 0}
+.price-up{color:var(--success)}
+.price-down{color:var(--danger)}
+.trade-btns{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:12px}
+.trade-btn-buy{background:var(--success);color:#fff;padding:10px;border:none;border-radius:6px;cursor:pointer;font-weight:600}
+.trade-btn-sell{background:var(--danger);color:#fff;padding:10px;border:none;border-radius:6px;cursor:pointer;font-weight:600}
+/* TERMINAL */
+.terminal{background:#0a0a0a;border:1px solid #333;border-radius:8px;padding:16px;font-family:'Courier New',monospace;font-size:.8em;max-height:300px;overflow-y:auto;color:var(--success)}
+.terminal .line{margin-bottom:2px}
+.terminal .prompt{color:var(--accent)}
+.terminal .error{color:var(--danger)}
+.terminal .warn{color:var(--warning)}
+.terminal .info{color:var(--info)}
+/* ATM CARD */
+.atm-card{width:340px;height:200px;border-radius:16px;padding:20px;position:relative;overflow:hidden;margin:10px 0;box-shadow:0 10px 30px rgba(0,0,0,.3)}
+.atm-card.mastercard{background:linear-gradient(135deg,#1a1a2e,#2d1b69)}
+.atm-card.visa{background:linear-gradient(135deg,#1a3a5c,#0a1628)}
+.atm-card.verve{background:linear-gradient(135deg,#006400,#004d00)}
+.atm-card.pilgrim{background:linear-gradient(135deg,#0a1628,#1a3a5c)}
+.atm-card .card-type{position:absolute;top:15px;right:20px;font-size:.7em;color:rgba(255,255,255,.7);text-transform:uppercase;letter-spacing:2px}
+.atm-card .card-chip{width:40px;height:30px;background:linear-gradient(135deg,#ffd700,#daa520);border-radius:6px;margin-bottom:15px}
+.atm-card .card-number{font-family:'Courier New',monospace;font-size:1.1em;letter-spacing:3px;margin-bottom:15px;color:rgba(255,255,255,.9)}
+.atm-card .card-details{display:flex;justify-content:space-between;font-size:.7em;color:rgba(255,255,255,.7)}
+.atm-card .card-holder{text-transform:uppercase}
+.atm-card .card-brand{position:absolute;bottom:20px;right:20px;font-size:1.2em;font-weight:700;color:rgba(255,255,255,.8)}
+/* CHAT ROBOT */
+.chat-fab{position:fixed;bottom:20px;right:20px;width:60px;height:60px;border-radius:50%;background:linear-gradient(135deg,var(--accent),var(--gold));display:flex;align-items:center;justify-content:center;font-size:1.5em;cursor:pointer;z-index:1000;box-shadow:0 4px 20px rgba(0,212,170,.4)}
+.chat-window{position:fixed;bottom:90px;right:20px;width:380px;max-height:500px;background:var(--card);border:1px solid var(--border);border-radius:16px;z-index:1000;display:none;flex-direction:column;box-shadow:0 20px 60px rgba(0,0,0,.5)}
+.chat-window.open{display:flex}
+.chat-header{padding:14px 18px;border-bottom:1px solid var(--border);display:flex;justify-content:space-between;align-items:center}
+.chat-header h4{color:var(--accent);font-size:.95em}
+.chat-messages{flex:1;overflow-y:auto;padding:14px;max-height:340px}
+.chat-msg{margin-bottom:10px;max-width:80%}
+.chat-msg.bot{margin-right:auto}
+.chat-msg.user{margin-left:auto;text-align:right}
+.chat-msg .bubble{padding:10px 14px;border-radius:12px;font-size:.85em;line-height:1.4}
+.chat-msg.bot .bubble{background:var(--primary);border:1px solid var(--border)}
+.chat-msg.user .bubble{background:var(--accent);color:#000}
+.chat-input-area{padding:12px;border-top:1px solid var(--border);display:flex;gap:8px}
+.chat-input-area input{flex:1;padding:10px;background:var(--primary);border:1px solid var(--border);border-radius:8px;color:var(--text);font-size:.9em}
+.chat-input-area button{padding:10px 16px;background:var(--accent);border:none;border-radius:8px;color:#000;cursor:pointer;font-weight:600}
+/* MODAL */
+.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.7);display:none;align-items:center;justify-content:center;z-index:2000}
+.modal-overlay.open{display:flex}
+.modal{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:30px;width:90%;max-width:550px;max-height:90vh;overflow-y:auto}
+.modal h3{color:var(--accent);margin-bottom:16px}
+.modal .close-modal{float:right;cursor:pointer;font-size:1.3em;color:#888}
+/* SALARY DB */
+.dept-card{background:var(--primary);border:1px solid var(--border);border-radius:10px;padding:16px;margin-bottom:12px}
+.dept-card h4{color:var(--gold);margin-bottom:10px;display:flex;justify-content:space-between;align-items:center}
+.emp-row{display:flex;align-items:center;gap:10px;padding:8px 0;border-bottom:1px solid var(--border);font-size:.85em}
+.emp-row:last-child{border-bottom:none}
+.status-dot{width:10px;height:10px;border-radius:50%;display:inline-block}
+.status-dot.green{background:var(--success)}
+.status-dot.yellow{background:var(--warning)}
+.status-dot.red{background:var(--danger)}
+/* RESPONSIVE */
+@media(max-width:768px){.sidebar{transform:translateX(-100%)}.sidebar.open{transform:translateX(0)}.main-content{margin-left:0}.trade-container{grid-template-columns:1fr}.stats-grid{grid-template-columns:1fr}.atm-card{width:100%}.form-row{flex-direction:column}.chat-window{width:calc(100% - 40px);right:20px}}
+/* ANIMATIONS */
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.5}}
+@keyframes slideIn{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
+.animate-in{animation:slideIn .5s ease-out}
+/* SCROLLBAR */
+::-webkit-scrollbar{width:6px}
+::-webkit-scrollbar-track{background:var(--primary)}
+::-webkit-scrollbar-thumb{background:var(--border);border-radius:3px}
+::-webkit-scrollbar-thumb:hover{background:var(--accent)}
+/* NOTIFICATION */
+.notification{position:fixed;top:20px;right:20px;padding:14px 20px;border-radius:10px;color:#fff;z-index:3000;animation:slideIn .3s ease-out;font-size:.9em;max-width:400px}
+.notification.success{background:var(--success)}
+.notification.error{background:var(--danger)}
+.notification.warning{background:var(--warning);color:#000}
+.notification.info{background:var(--info)}
+.hidden{display:none!important}
+.signature-stamp{border:2px solid var(--gold);border-radius:8px;padding:8px 16px;display:inline-block;font-size:.75em;color:var(--gold);text-align:center;margin-top:10px}
+.candle-chart{display:flex;align-items:flex-end;gap:2px;height:200px;padding:10px}
+.candle{display:flex;flex-direction:column;align-items:center;min-width:6px}
+.candle-body{width:8px;min-height:4px;border-radius:1px}
+.candle-wick{width:2px;background:#888}
+</style>
+<script src="https://sites.super.myninja.ai/_assets/ninja-daytona-script.js"></script>
+</head>
+<body>
+<!-- ========== COVER PAGE ========== -->
+<div id="coverPage" class="page active">
+<div class="cover-logo">🏦</div>
+<h1 class="cover-title">Global Pilgrim Bank</h1>
+<p class="cover-subtitle">Nigeria &bull; International Digital Banking Ecosystem</p>
+<p class="cover-tagline">"Hope Like We Make Future" — Mother Bank</p>
+<div class="cover-btns">
+<button class="btn btn-primary" onclick="showPage('adminLogin')">🔑 Admin Login</button>
+<button class="btn btn-gold" onclick="showPage('custLogin')">👤 Customer Login</button>
+<button class="btn btn-outline" onclick="showPage('custRegister')">📝 Register</button>
+</div>
+<p style="margin-top:30px;font-size:.8em;color:#888;z-index:1;text-align:center;max-width:500px">
+Owner: Olawale Abdul-Ganiyu Adeshina | BN-998827364-GP<br>
+Reg: CBN | NIBSS | SWIFT: GPBINGLA | BIN: 519911<br>
+🌐 www.globalpilgrimsbank.com
+</p>
+<div class="cover-footer">
+&copy; 2024 Global Pilgrim Bank Nigeria. All Rights Reserved. | support@globalpilgrimbank.com
+<br><button class="btn btn-sm btn-outline" style="margin-top:8px;font-size:.8em" onclick="downloadAsZip()">📥 Download App (ZIP)</button>
+</div>
+</div>
+
+<!-- ========== ADMIN LOGIN ========== -->
+<div id="adminLogin" class="page">
+<div class="login-container">
+<div class="login-box">
+<h2>🏦 Admin Login</h2>
+<p>Global Pilgrim Bank — Administrator Access</p>
+<div class="form-group"><label>Username</label><input id="adminUser" placeholder="Enter admin username"></div>
+<div class="form-group"><label>Password</label><input id="adminPass" type="password" placeholder="Enter password"></div>
+<button class="btn btn-primary" style="width:100%" onclick="adminLogin()">Login</button>
+<div class="login-link"><a onclick="showPage('coverPage')">← Back to Home</a> &nbsp;|&nbsp; <a onclick="alert('Contact: adeganglobal@gmail.com')">Forgot Password?</a></div>
+</div>
+</div>
+</div>
+
+<!-- ========== CUSTOMER LOGIN ========== -->
+<div id="custLogin" class="page">
+<div class="login-container">
+<div class="login-box">
+<h2>👤 Customer Login</h2>
+<p>Access your Global Pilgrim Bank account</p>
+<div class="form-group"><label>Account Number</label><input id="custAccInput" placeholder="10-digit account number"></div>
+<div class="form-group"><label>PIN</label><input id="custPinInput" type="password" placeholder="Enter PIN"></div>
+<button class="btn btn-primary" style="width:100%" onclick="custLogin()">Login</button>
+<div class="login-link"><a onclick="showPage('coverPage')">← Back</a> &nbsp;|&nbsp; <a onclick="showPage('custRegister')">Register</a></div>
+</div>
+</div>
+</div>
+
+<!-- ========== CUSTOMER REGISTER ========== -->
+<div id="custRegister" class="page">
+<div class="login-container">
+<div class="login-box" style="max-width:550px">
+<h2>📝 Customer Registration</h2>
+<p>Admin-created accounts only. Contact admin at adeganglobal@gmail.com</p>
+<div class="form-row"><div class="form-group"><label>First Name</label><input id="regFirst" placeholder="First name"></div><div class="form-group"><label>Last Name</label><input id="regLast" placeholder="Last name"></div></div>
+<div class="form-row"><div class="form-group"><label>Date of Birth</label><input id="regDob" type="date"></div><div class="form-group"><label>Gender</label><select id="regGender"><option>Male</option><option>Female</option></select></div></div>
+<div class="form-group"><label>Email</label><input id="regEmail" type="email" placeholder="Email address"></div>
+<div class="form-group"><label>Phone Number</label><input id="regPhone" placeholder="+234..."></div>
+<div class="form-row"><div class="form-group"><label>NIN</label><input id="regNin" placeholder="National ID Number"></div><div class="form-group"><label>BVN</label><input id="regBvn" placeholder="Bank Verification Number"></div></div>
+<div class="form-group"><label>Country</label><select id="regCountry"><option>Nigeria</option><option>Ghana</option><option>South Africa</option><option>United States</option><option>United Kingdom</option><option>China</option><option>Russia</option><option>Ukraine</option><option>Japan</option><option>Brazil</option><option>Argentina</option><option>Canada</option><option>Australia</option><option>Cameroon</option><option>Hong Kong</option></select></div>
+<div class="form-group"><label>Account Type</label><select id="regAccType"><option>Savings</option><option>Current</option><option>Business</option><option>Domiciliary</option></select></div>
+<div class="form-group"><label>ID Document Photo</label><input id="regDocPhoto" type="file" accept="image/*"></div>
+<div class="form-group"><label>Passport Photo</label><input id="regPassport" type="file" accept="image/*"></div>
+<div class="form-group"><label>Signature</label><canvas id="sigCanvas" width="400" height="100" style="border:1px solid var(--border);border-radius:8px;background:var(--primary);width:100%;cursor:crosshair"></canvas>
+<button class="btn btn-sm btn-outline" onclick="clearSig()">Clear</button></div>
+<button class="btn btn-primary" style="width:100%" onclick="registerCustomer()">Submit Registration</button>
+<div class="login-link"><a onclick="showPage('coverPage')">← Back</a></div>
+</div>
+</div>
+</div>
+
+<!-- ========== ADMIN DASHBOARD ========== -->
+<div id="adminDash" class="page">
+<div class="dashboard">
+<aside class="sidebar" id="adminSidebar">
+<div class="sidebar-header">
+<div style="font-size:2em">🏦</div>
+<h3>Global Pilgrim Bank</h3>
+<small>Admin Panel</small>
+</div>
+<nav class="sidebar-nav">
+<div class="nav-item active" onclick="showAdminTab('overview')"><span class="icon">📊</span> Overview</div>
+<div class="nav-item" onclick="showAdminTab('customers')"><span class="icon">👥</span> Customers</div>
+<div class="nav-item" onclick="showAdminTab('accounts')"><span class="icon">💰</span> Accounts & Balance</div>
+<div class="nav-item" onclick="showAdminTab('transfers')"><span class="icon">🔄</span> Transfers</div>
+<div class="nav-item" onclick="showAdminTab('payments')"><span class="icon">💳</span> Payments</div>
+<div class="nav-item" onclick="showAdminTab('crypto')"><span class="icon">₿</span> Crypto Wallet</div>
+<div class="nav-item" onclick="showAdminTab('mining')"><span class="icon">⛏️</span> Mining Engine</div>
+<div class="nav-item" onclick="showAdminTab('trading')"><span class="icon">📈</span> Trading (Trade Dragon)</div>
+<div class="nav-item" onclick="showAdminTab('invest')"><span class="icon">🏢</span> Investment & Shares</div>
+<div class="nav-item" onclick="showAdminTab('cards')"><span class="icon">💳</span> Cards</div>
+<div class="nav-item" onclick="showAdminTab('salary')"><span class="icon">💰</span> Salary/Payroll</div>
+<div class="nav-item" onclick="showAdminTab('betting')"><span class="icon">⚽</span> Betting</div>
+<div class="nav-item" onclick="showAdminTab('terminal')"><span class="icon">🖥️</span> Terminal</div>
+<div class="nav-item" onclick="showAdminTab('reports')"><span class="icon">📋</span> Reports</div>
+<div class="nav-item" onclick="showAdminTab('settings')"><span class="icon">⚙️</span> Settings</div>
+<div class="nav-item" onclick="showAdminTab('messages')"><span class="icon">💬</span> Messages</div>
+</nav>
+<div class="sidebar-footer">
+<button class="btn btn-danger btn-sm" style="width:100%" onclick="logout()">🚪 Logout</button>
+</div>
+</aside>
+<main class="main-content">
+<div class="top-bar">
+<h2 id="adminPageTitle">Dashboard Overview</h2>
+<div class="top-bar-actions">
+<button class="btn btn-sm btn-outline" onclick="toggleSidebar()">☰</button>
+<div class="user-badge"><div class="avatar">OA</div><span id="adminNameDisplay">Admin</span></div>
+</div>
+</div>
+<!-- ADMIN TABS -->
+<div id="tab-overview" class="admin-tab">
+<div class="stats-grid" id="adminStatsGrid"></div>
+<div class="panel"><div class="panel-header"><h3>Quick Actions</h3></div><div class="panel-body">
+<div style="display:flex;gap:10px;flex-wrap:wrap">
+<button class="btn btn-primary btn-sm" onclick="showAdminTab('customers')">+ New Customer</button>
+<button class="btn btn-gold btn-sm" onclick="showAdminTab('transfers')">Send Money</button>
+<button class="btn btn-info btn-sm" onclick="showAdminTab('crypto')">Crypto Wallet</button>
+<button class="btn btn-sm btn-outline" onclick="showAdminTab('mining')">Start Mining</button>
+<button class="btn btn-sm btn-outline" onclick="showAdminTab('trading')">Trade</button>
+</div></div></div>
+<div class="panel"><div class="panel-header"><h3>Recent Transactions</h3></div><div class="panel-body no-pad"><div class="table-wrap"><table id="recentTxTable"><thead><tr><th>Ref</th><th>Type</th><th>From</th><th>To</th><th>Amount</th><th>Status</th><th>Date</th></tr></thead><tbody></tbody></table></div></div></div>
+<div class="panel"><div class="panel-header"><h3>Security Terminal</h3></div><div class="panel-body"><div class="terminal" id="securityTerminal"></div></div></div>
+</div>
+<div id="tab-customers" class="admin-tab hidden">
+<div class="panel"><div class="panel-header"><h3>Customer Management</h3><button class="btn btn-primary btn-sm" onclick="openNewCustomerModal()">+ New Customer</button></div><div class="panel-body no-pad"><div class="table-wrap"><table id="custTable"><thead><tr><th>Acc No</th><th>Serial</th><th>Name</th><th>Email</th><th>Phone</th><th>BVN</th><th>Type</th><th>Status</th><th>Actions</th></tr></thead><tbody id="custTableBody"></tbody></table></div></div></div>
+</div>
+<div id="tab-accounts" class="admin-tab hidden">
+<div class="panel"><div class="panel-header"><h3>Admin Balance Management</h3></div><div class="panel-body">
+<div class="stats-grid" id="adminBalanceGrid"></div>
+<h4 style="margin:16px 0 8px;color:var(--gold)">Edit Customer Balances</h4>
+<div class="form-group"><label>Select Customer</label><select id="balCustSelect" onchange="loadCustBalance()"><option value="">-- Select --</option></select></div>
+<div id="custBalEditor" class="hidden">
+<div class="form-row"><div class="form-group"><label>Currency</label><select id="balCurrency"></select></div><div class="form-group"><label>Amount</label><input id="balAmount" type="number" step="0.01"></div></div>
+<div style="display:flex;gap:8px"><button class="btn btn-primary btn-sm" onclick="creditCustomer()">+ Credit</button><button class="btn btn-danger btn-sm" onclick="debitCustomer()">- Debit</button></div>
+<div id="custBalDisplay" style="margin-top:12px"></div>
+</div></div></div>
+<div class="panel"><div class="panel-header"><h3>Owner Bank Accounts (Vault)</h3></div><div class="panel-body no-pad"><div class="table-wrap"><table><thead><tr><th>Bank</th><th>Account Number</th><th>Account Name</th><th>Action</th></tr></thead><tbody id="vaultTable"></tbody></table></div></div></div>
+</div>
+<div id="tab-transfers" class="admin-tab hidden">
+<div class="panel"><div class="panel-header"><h3>Local Transfer</h3></div><div class="panel-body">
+<div class="form-row"><div class="form-group"><label>Sender Account</label><select id="senderAccSelect"></select></div><div class="form-group"><label>Currency</label><select id="transferCurrency"><option value="NGN">NGN - Naira</option><option value="USD">USD - Dollar</option><option value="EUR">EUR - Euro</option><option value="GBP">GBP - Pound</option><option value="CNY">CNY - Yuan</option><option value="JPY">JPY - Yen</option><option value="RUB">RUB - Ruble</option><option value="UAH">UAH - Hryvnia</option><option value="GHS">GHS - Cedi</option><option value="ZAR">ZAR - Rand</option><option value="BRL">BRL - Real</option><option value="ARS">ARS - Peso</option><option value="CAD">CAD - Dollar</option><option value="AUD">AUD - Dollar</option><option value="CMR">XAF - CFA</option><option value="HKD">HKD - Dollar</option></select></div></div>
+<div class="form-row"><div class="form-group"><label>Receiver Bank</label><select id="receiverBankSelect" onchange="resolveBankName()"></select></div><div class="form-group"><label>Receiver Account Number</label><input id="receiverAccNum" placeholder="10-digit account" oninput="resolveBankName()"></div></div>
+<div class="form-group"><label>Receiver Name (auto-resolved)</label><input id="receiverName" placeholder="Will auto-fill" readonly style="color:var(--accent)"></div>
+<div class="form-row"><div class="form-group"><label>Amount</label><input id="transferAmount" type="number" step="0.01" placeholder="0.00"></div><div class="form-group"><label>Narration</label><input id="transferNarration" placeholder="Payment for..."></div></div>
+<button class="btn btn-primary" onclick="sendTransfer()">Send Transfer</button>
+<span style="margin-left:10px;font-size:.8em;color:#888">Signature: Global Pilgrim Bank | Olawale Abdul-Ganiyu Adeshina</span>
+</div></div>
+<div class="panel"><div class="panel-header"><h3>International Transfer (SWIFT)</h3></div><div class="panel-body">
+<div class="form-row"><div class="form-group"><label>SWIFT/BIC Code</label><input id="swiftCode" placeholder="e.g. GPBINGLA"></div><div class="form-group"><label>IBAN</label><input id="ibanInput" placeholder="International Bank Account Number"></div></div>
+<div class="form-row"><div class="form-group"><label>Beneficiary Name</label><input id="intlBenefName"></div><div class="form-group"><label>Beneficiary Address</label><input id="intlBenefAddr"></div></div>
+<div class="form-row"><div class="form-group"><label>Currency</label><select id="intlCurrency"><option>USD</option><option>EUR</option><option>GBP</option><option>NGN</option></select></div><div class="form-group"><label>Amount</label><input id="intlAmount" type="number"></div></div>
+<div class="form-group"><label>Purpose</label><input id="intlPurpose" placeholder="Purpose of transfer"></div>
+<button class="btn btn-gold" onclick="sendIntlTransfer()">Send via SWIFT</button>
+</div></div>
+</div>
+<div id="tab-payments" class="admin-tab hidden">
+<div class="panel"><div class="panel-header"><h3>Nigerian Commercial Banks</h3></div><div class="panel-body no-pad"><div class="table-wrap"><table><thead><tr><th>Bank Name</th><th>Code</th><th>SWIFT</th><th>Type</th></tr></thead><tbody id="commBankTable"></tbody></table></div></div></div>
+<div class="panel"><div class="panel-header"><h3>Nigerian Microfinance Banks</h3></div><div class="panel-body no-pad"><div class="table-wrap"><table><thead><tr><th>Bank Name</th><th>Code</th><th>Type</th></tr></thead><tbody id="mfbBankTable"></tbody></table></div></div></div>
+<div class="panel"><div class="panel-header"><h3>Payment to Microfinance</h3></div><div class="panel-body">
+<div class="form-row"><div class="form-group"><label>Bank</label><select id="mfbPaySelect"></select></div><div class="form-group"><label>Account Number</label><input id="mfbPayAccNum" placeholder="Account number"></div></div>
+<div class="form-row"><div class="form-group"><label>Account Name</label><input id="mfbPayName"></div><div class="form-group"><label>Amount (NGN)</label><input id="mfbPayAmount" type="number"></div></div>
+<button class="btn btn-primary btn-sm" onclick="sendMfbPayment()">Send Payment</button>
+</div></div>
+</div>
+<div id="tab-crypto" class="admin-tab hidden">
+<div class="panel"><div class="panel-header"><h3>Crypto Wallet Dashboard</h3><button class="btn btn-sm btn-outline" onclick="generateAllWallets()">🔄 Generate Wallets</button></div><div class="panel-body">
+<div class="stats-grid" id="cryptoBalanceGrid"></div>
+</div></div>
+<div class="panel"><div class="panel-header"><h3>Send Crypto</h3></div><div class="panel-body">
+<div class="form-row"><div class="form-group"><label>Coin</label><select id="cryptoSendCoin"></select></div><div class="form-group"><label>Amount</label><input id="cryptoSendAmount" type="number" step="0.00000001"></div></div>
+<div class="form-group"><label>Destination Wallet Address</label><input id="cryptoSendAddr" placeholder="0x..."></div>
+<div class="form-group"><label>Your Wallet Address</label><input id="cryptoFromAddr" readonly style="color:var(--accent)"></div>
+<button class="btn btn-primary btn-sm" onclick="sendCrypto()">Send</button>
+</div></div>
+<div class="panel"><div class="panel-header"><h3>Receive Crypto</h3></div><div class="panel-body">
+<div class="form-group"><label>Coin</label><select id="cryptoRecvCoin" onchange="showRecvAddr()"></select></div>
+<div class="form-group"><label>Receiving Address</label><input id="cryptoRecvAddr" readonly style="color:var(--gold);font-family:monospace;font-size:.9em"></div>
+<button class="btn btn-sm btn-outline" onclick="copyRecvAddr()">📋 Copy Address</button>
+</div></div>
+<div class="panel"><div class="panel-header"><h3>Convert / Swap</h3></div><div class="panel-body">
+<div class="form-row"><div class="form-group"><label>From</label><select id="swapFrom"></select></div><div class="form-group"><label>To</label><select id="swapTo"></select></div></div>
+<div class="form-group"><label>Amount</label><input id="swapAmount" type="number" step="0.01"></div>
+<button class="btn btn-gold btn-sm" onclick="swapCrypto()">Swap</button>
+</div></div>
+</div>
+<div id="tab-mining" class="admin-tab hidden">
+<div class="panel"><div class="panel-header"><h3>⛏️ Mining Engine</h3><div><button class="btn btn-primary btn-sm" onclick="startAllMining()">▶ Start All</button> <button class="btn btn-danger btn-sm" onclick="stopAllMining()">⏹ Stop All</button></div></div><div class="panel-body">
+<div class="form-group"><label>Mining Interval</label><select id="miningSpeed"><option value="3600000">1 Hour</option><option value="60000" selected>1 Minute (Demo)</option><option value="10000">10 Seconds (Fast)</option></select></div>
+<div id="miningCardsContainer"></div>
+</div></div>
+<div class="panel"><div class="panel-header"><h3>Currency Mining</h3></div><div class="panel-body"><div id="currencyMiningContainer"></div></div></div>
+</div>
+<div id="tab-trading" class="admin-tab hidden">
+<div class="panel"><div class="panel-header"><h3>📈 Trade Dragon — Trading Platform</h3><small>Owner: Olawale Abdul-Ganiyu | adegan95@yahoo.com</small></div><div class="panel-body">
+<div class="trade-container">
+<div class="chart-area">
+<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px">
+<div class="trade-pair" id="tradePairDisplay">EUR/USD</div>
+<div><select id="tradePairSelect" onchange="changeTradePair()"><option>EUR/USD</option><option>GBP/USD</option><option>USD/JPY</option><option>BTC/USD</option><option>ETH/USD</option><option>PILGRIM/USD</option><option>USD/NGN</option><option>XAU/USD</option></select></div>
+</div>
+<div class="price-display" id="tradePrice">1.08560</div>
+<div id="tradeChart" class="candle-chart"></div>
+<div style="margin-top:10px;display:flex;gap:8px;flex-wrap:wrap">
+<button class="btn btn-sm btn-outline" onclick="toggleAutoTrade()" id="autoTradeBtn">🤖 Auto Trade: OFF</button>
+<span style="font-size:.8em;color:#888">Buy: <span id="buyPrice">1.0855</span> | Sell: <span id="sellPrice">1.0856</span></span>
+</div>
+</div>
+<div class="trade-panel">
+<h4 style="color:var(--gold);margin-bottom:12px">Trade Panel</h4>
+<div class="form-group"><label>Lot Size</label><input id="lotSize" type="number" value="0.01" step="0.01" min="0.01"></div>
+<div class="form-group"><label>Leverage</label><select id="leverage"><option>1:100</option><option>1:200</option><option selected>1:500</option><option>1:1000</option></select></div>
+<div class="trade-btns">
+<button class="trade-btn-buy" onclick="placeTrade('BUY')">BUY ▲</button>
+<button class="trade-btn-sell" onclick="placeTrade('SELL')">SELL ▼</button>
+</div>
+<div style="margin-top:12px">
+<h5 style="color:var(--accent);font-size:.85em">Balances</h5>
+<p style="font-size:.8em">Main: <span id="tradeMainBal">$10,000.00</span></p>
+<p style="font-size:.8em">Profit: <span id="tradeProfitBal" style="color:var(--success)">$0.00</span></p>
+<div style="margin-top:8px;display:flex;gap:6px">
+<button class="btn btn-sm btn-outline" onclick="moveProfitToMain()">Profit→Main</button>
+<button class="btn btn-sm btn-outline" onclick="withdrawProfit()">Withdraw</button>
+</div>
+</div>
+<div style="margin-top:12px">
+<h5 style="color:var(--accent);font-size:.85em">Open Positions</h5>
+<div id="openPositions" style="font-size:.8em;max-height:150px;overflow-y:auto"></div>
+</div>
+</div>
+</div>
+</div></div>
+</div>
+<div id="tab-invest" class="admin-tab hidden">
+<div class="panel"><div class="panel-header"><h3>🏢 Pilgrim Investment & Shares</h3></div><div class="panel-body">
+<p style="margin-bottom:16px;color:#888">Investment period: 5 years (renewable). Choose Share or Investment below.</p>
+<div class="form-group"><label>Type</label><select id="investType"><option>Investment</option><option>Shares</option></select></div>
+<div class="form-group"><label>Amount</label><input id="investAmount" type="number" placeholder="Enter amount"></div>
+<div class="form-group"><label>Currency</label><select id="investCurrency"><option>NGN</option><option>USD</option><option>EUR</option><option>GBP</option><option>Pilgrim Coin</option></select></div>
+<p style="font-size:.85em;color:var(--gold);margin:10px 0">After registration, contact admin via email:</p>
+<a href="mailto:adeganglobal@gmail.com?subject=Pilgrim Investment/Shares Registration" class="btn btn-gold btn-sm" style="text-decoration:none">📧 adeganglobal@gmail.com</a>
+<a href="mailto:pilgrimshares@gmail.com?subject=Pilgrim Shares Registration" class="btn btn-primary btn-sm" style="text-decoration:none;margin-left:8px">📧 pilgrimshares@gmail.com</a>
+<a href="mailto:adeganglobalbank@gmail.com?subject=Global Pilgrim Bank Investment" class="btn btn-info btn-sm" style="text-decoration:none;margin-left:8px">📧 adeganglobalbank@gmail.com</a>
+<button class="btn btn-primary" style="margin-top:16px" onclick="submitInvestment()">Submit Registration</button>
+</div></div>
+</div>
+<div id="tab-cards" class="admin-tab hidden">
+<div class="panel"><div class="panel-header"><h3>💳 Virtual ATM Cards</h3></div><div class="panel-body">
+<div style="display:flex;gap:20px;flex-wrap:wrap">
+<div class="atm-card pilgrim"><div class="card-type">Pilgrim Card</div><div class="card-chip"></div><div class="card-number">5199 1111 2368 4768</div><div class="card-details"><div><div style="font-size:.6em">CARD HOLDER</div><div class="card-holder" id="cardHolderName">OLAWALE A. ADESHINA</div></div><div><div style="font-size:.6em">EXPIRES</div><div>12/28</div></div></div><div class="card-brand">MASTERCARD</div></div>
+<div class="atm-card visa"><div class="card-type">Visa</div><div class="card-chip"></div><div class="card-number">4682 1903 0334 2014</div><div class="card-details"><div><div style="font-size:.6em">CARD HOLDER</div><div class="card-holder">OLAWALE A. ADESHINA</div></div><div><div style="font-size:.6em">EXPIRES</div><div>12/28</div></div></div><div class="card-brand">VISA</div></div>
+<div class="atm-card verve"><div class="card-type">Verve</div><div class="card-chip"></div><div class="card-number">5078 7230 1007 4501</div><div class="card-details"><div><div style="font-size:.6em">CARD HOLDER</div><div class="card-holder">OLAWALE A. ADESHINA</div></div><div><div style="font-size:.6em">EXPIRES</div><div>12/28</div></div></div><div class="card-brand">VERVE</div></div>
+</div>
+<div style="margin-top:16px">
+<h4 style="color:var(--gold);margin-bottom:8px">Card Details</h4>
+<div class="form-row"><div class="form-group"><label>CVV</label><input value="***" readonly></div><div class="form-group"><label>Card Status</label><select><option>Active</option><option>Frozen</option></select></div></div>
+<p style="font-size:.8em;color:#888">Linked to Global Pilgrim Bank account. Accepted worldwide on Mastercard/Visa/Verve networks.</p>
+</div>
+</div></div>
+</div>
+<div id="tab-salary" class="admin-tab hidden">
+<div class="panel"><div class="panel-header"><h3>💰 Salary / Payroll Database</h3><button class="btn btn-primary btn-sm" onclick="addDepartment()">+ Add Department</button></div><div class="panel-body">
+<div id="deptContainer"></div>
+<div style="margin-top:16px;display:flex;gap:8px;flex-wrap:wrap">
+<button class="btn btn-primary btn-sm" onclick="payAllSalary()">💸 Pay All</button>
+<input id="salarySearch" placeholder="Search name/phone/email" oninput="searchSalary()" style="padding:8px;background:var(--primary);border:1px solid var(--border);border-radius:6px;color:var(--text);font-size:.85em">
+</div>
+</div></div>
+</div>
+<div id="tab-betting" class="admin-tab hidden">
+<div class="panel"><div class="panel-header"><h3>⚽ Sports Betting</h3></div><div class="panel-body">
+<div class="form-group"><label>League</label><select id="betLeague" onchange="loadMatches()"><option>EPL - English Premier League</option><option>La Liga - Spanish League</option><option>Serie A - Italian League</option><option>Bundesliga - German League</option><option>Ligue 1 - French League</option><option>NPFL - Nigerian League</option><option>AFCON - Africa Cup of Nations</option><option>FIFA World Cup</option><option>Champions League</option><option>Europa League</option></select></div>
+<div id="matchesContainer"></div>
+<div class="form-group" style="margin-top:12px"><label>Bet Amount (NGN)</label><input id="betAmount" type="number" value="100" min="5"></div>
+<button class="btn btn-gold btn-sm" onclick="placeBet()">Place Bet</button>
+<p style="font-size:.75em;color:#888;margin-top:8px">Powered by Global Pilgrim Bank | Bet9ja/MSport/SportyBet integration</p>
+</div></div>
+</div>
+<div id="tab-terminal" class="admin-tab hidden">
+<div class="panel"><div class="panel-header"><h3>🖥️ Security & Network Terminal</h3><button class="btn btn-sm btn-outline" onclick="scanNetwork()">🔍 Scan</button></div><div class="panel-body">
+<div class="terminal" id="mainTerminal" style="min-height:350px"></div>
+<div style="margin-top:12px;display:flex;gap:8px;flex-wrap:wrap">
+<button class="btn btn-sm btn-outline" onclick="scanNetwork()">Scan Network</button>
+<button class="btn btn-sm btn-danger" onclick="voltageAction()">⚡ Voltage Action</button>
+<button class="btn btn-sm btn-info" onclick="showConnections()">Show Connections</button>
+</div>
+<div style="margin-top:12px">
+<h4 style="color:var(--gold);font-size:.9em">Network Info</h4>
+<div id="networkInfo" style="font-size:.8em;color:#888"></div>
+</div>
+</div></div>
+</div>
+<div id="tab-reports" class="admin-tab hidden">
+<div class="panel"><div class="panel-header"><h3>📋 Reports & Statements</h3></div><div class="panel-body">
+<div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:16px">
+<button class="btn btn-sm btn-primary" onclick="genStatement()">📄 Account Statement</button>
+<button class="btn btn-sm btn-gold" onclick="genTxReport()">📊 Transaction Report</button>
+<button class="btn btn-sm btn-info" onclick="exportPDF()">📥 Export PDF</button>
+</div>
+<div id="reportOutput"></div>
+</div></div>
+</div>
+<div id="tab-settings" class="admin-tab hidden">
+<div class="panel"><div class="panel-header"><h3>⚙️ Settings</h3></div><div class="panel-body">
+<div class="form-group"><label>Admin Username</label><input id="setAdminUser" value="Olawaleglobalpilgrim"></div>
+<div class="form-group"><label>Change Password</label><input id="setAdminPass" type="password" placeholder="New password"></div>
+<button class="btn btn-primary btn-sm" onclick="updateAdminSettings()">Save</button>
+<h4 style="color:var(--gold);margin:20px 0 10px">Bank Information</h4>
+<p style="font-size:.85em;line-height:1.8">
+<strong>Bank Name:</strong> Global Pilgrim Bank Nigeria<br>
+<strong>Registration:</strong> BN-998827364-GP<br>
+<strong>SWIFT:</strong> GPBINGLA<br>
+<strong>BIN:</strong> 519911 / 468219 / 507872<br>
+<strong>NIBSS Code:</strong> 999GPB<br>
+<strong>CBN License:</strong> Active<br>
+<strong>USSD:</strong> *7001#<br>
+<strong>Owner:</strong> Olawale Abdul-Ganiyu Adeshina<br>
+<strong>NIN:</strong> 87142812384 | <strong>BVN:</strong> 22203477535<br>
+<strong>Phone:</strong> +2349030277275<br>
+<strong>Email:</strong> adeganglobal@gmail.com<br>
+<strong>Address:</strong> Ogun State / Lagos Office, Nigeria<br>
+<strong>Website:</strong> www.globalpilgrimsbank.com<br>
+<strong>Support:</strong> support@globalpilgrimbank.com | support@globalpilgrimsbank.com<br>
+<strong>Admin:</strong> admin@globalpilgrimsbank.com | global@pilgrims.com
+</p>
+<div class="signature-stamp">
+<strong>Global Pilgrim Bank</strong><br>
+Original — Adegan — International<br>
+Olawale Abdul-Ganiyu Adeshina
+</div>
+</div></div>
+</div>
+<div id="tab-messages" class="admin-tab hidden">
+<div class="panel"><div class="panel-header"><h3>💬 Customer Messages</h3></div><div class="panel-body">
+<div id="msgList" style="max-height:400px;overflow-y:auto"></div>
+<div class="form-group" style="margin-top:12px"><label>Reply to Customer</label><textarea id="adminReply" placeholder="Type your reply..."></textarea></div>
+<div class="form-group"><label>Customer</label><select id="msgCustSelect"></select></div>
+<button class="btn btn-primary btn-sm" onclick="sendAdminMsg()">Send Reply</button>
+</div></div>
+</div>
+</main>
+</div>
+</div>
+
+<!-- ========== CUSTOMER DASHBOARD ========== -->
+<div id="custDash" class="page">
+<div class="dashboard">
+<aside class="sidebar" id="custSidebar">
+<div class="sidebar-header">
+<div style="font-size:2em">👤</div>
+<h3>Global Pilgrim Bank</h3>
+<small id="custDashName">Customer</small>
+</div>
+<nav class="sidebar-nav">
+<div class="nav-item active" onclick="showCustTab('overview')"><span class="icon">📊</span> My Dashboard</div>
+<div class="nav-item" onclick="showCustTab('accounts')"><span class="icon">💰</span> My Accounts</div>
+<div class="nav-item" onclick="showCustTab('transfer')"><span class="icon">🔄</span> Transfer</div>
+<div class="nav-item" onclick="showCustTab('crypto')"><span class="icon">₿</span> Crypto</div>
+<div class="nav-item" onclick="showCustTab('cards')"><span class="icon">💳</span> My Card</div>
+<div class="nav-item" onclick="showCustTab('history')"><span class="icon">📋</span> History</div>
+<div class="nav-item" onclick="showCustTab('profile')"><span class="icon">👤</span> Profile</div>
+<div class="nav-item" onclick="showCustTab('msg')"><span class="icon">💬</span> Message Admin</div>
+</nav>
+<div class="sidebar-footer">
+<button class="btn btn-danger btn-sm" style="width:100%" onclick="logout()">🚪 Logout</button>
+</div>
+</aside>
+<main class="main-content">
+<div class="top-bar"><h2 id="custPageTitle">My Dashboard</h2><div class="top-bar-actions"><button class="btn btn-sm btn-outline" onclick="toggleCustSidebar()">☰</button><div class="user-badge"><div class="avatar" id="custAvatar">C</div><span id="custDashAcc">0000000000</span></div></div></div>
+<div id="ctab-overview" class="cust-tab">
+<div class="stats-grid" id="custStatsGrid"></div>
+<div class="panel"><div class="panel-header"><h3>Recent Activity</h3></div><div class="panel-body no-pad"><div class="table-wrap"><table><thead><tr><th>Date</th><th>Type</th><th>Amount</th><th>Status</th></tr></thead><tbody id="custRecentTx"></tbody></table></div></div></div>
+</div>
+<div id="ctab-accounts" class="cust-tab hidden">
+<div class="stats-grid" id="custBalGrid"></div>
+</div>
+<div id="ctab-transfer" class="cust-tab hidden">
+<div class="panel"><div class="panel-header"><h3>Send Money</h3></div><div class="panel-body">
+<div class="form-row"><div class="form-group"><label>Bank</label><select id="custSendBank"></select></div><div class="form-group"><label>Account Number</label><input id="custSendAcc" placeholder="10-digit"></div></div>
+<div class="form-row"><div class="form-group"><label>Amount</label><input id="custSendAmt" type="number"></div><div class="form-group"><label>Currency</label><select id="custSendCur"><option>NGN</option><option>USD</option><option>EUR</option><option>GBP</option></select></div></div>
+<div class="form-group"><label>Narration</label><input id="custSendNarr" placeholder="Purpose"></div>
+<button class="btn btn-primary" onclick="custSendMoney()">Send</button>
+</div></div>
+</div>
+<div id="ctab-crypto" class="cust-tab hidden">
+<div class="panel"><div class="panel-header"><h3>My Crypto Wallet</h3></div><div class="panel-body"><div class="stats-grid" id="custCryptoGrid"></div></div></div>
+</div>
+<div id="ctab-cards" class="cust-tab hidden">
+<div class="panel"><div class="panel-header"><h3>My Card</h3></div><div class="panel-body">
+<div id="custCardDisplay"></div>
+</div></div>
+</div>
+<div id="ctab-history" class="cust-tab hidden">
+<div class="panel"><div class="panel-header"><h3>Transaction History</h3></div><div class="panel-body no-pad"><div class="table-wrap"><table><thead><tr><th>Date</th><th>Ref</th><th>Type</th><th>Amount</th><th>Status</th></tr></thead><tbody id="custHistoryTable"></tbody></table></div></div></div>
+</div>
+<div id="ctab-profile" class="cust-tab hidden">
+<div class="panel"><div class="panel-header"><h3>My Profile</h3></div><div class="panel-body"><div id="custProfileInfo"></div></div></div>
+</div>
+<div id="ctab-msg" class="cust-tab hidden">
+<div class="panel"><div class="panel-header"><h3>Message Admin</h3></div><div class="panel-body">
+<div id="custMsgList" style="max-height:300px;overflow-y:auto;margin-bottom:12px"></div>
+<div class="form-group"><textarea id="custMsgInput" placeholder="Type your message..."></textarea></div>
+<button class="btn btn-primary btn-sm" onclick="sendCustMsg()">Send</button>
+</div></div>
+</div>
+</main>
+</div>
+</div>
+
+<!-- ========== MODALS ========== -->
+<div class="modal-overlay" id="modalOverlay">
+<div class="modal">
+<span class="close-modal" onclick="closeModal()">&times;</span>
+<h3 id="modalTitle">Modal</h3>
+<div id="modalBody"></div>
+</div>
+</div>
+
+<!-- CHAT ROBOT -->
+<div class="chat-fab" onclick="toggleChat()">🤖</div>
+<div class="chat-window" id="chatWindow">
+<div class="chat-header"><h4>🤖 GPB Assistant</h4><span onclick="toggleChat()" style="cursor:pointer">&times;</span></div>
+<div class="chat-messages" id="chatMessages"></div>
+<div class="chat-input-area"><input id="chatInput" placeholder="Ask me anything..." onkeydown="if(event.key==='Enter')sendChat()"><button onclick="sendChat()">Send</button></div>
+</div>
+
+<script>
+// ============ DATA STORE ============
+const DB = {
+admin: { username: 'Olawaleglobalpilgrim', password: 'abdulganiglobalpilgrim', name: 'Olawale Abdul-Ganiyu Adeshina' },
+customers: [],
+transactions: [],
+messages: [],
+departments: [],
+mining: {},
+trading: { mainBal: 10000, profitBal: 0, positions: [], autoTrade: false, prices: {} },
+loggedInUser: null,
+loggedInCust: null,
+miningIntervals: [],
+tradeInterval: null,
+priceInterval: null
+};
+
+// ============ BANKS DATA ============
+const COMMERCIAL_BANKS = [
+{name:'Access Bank',code:'044',swift:'ABNGNGLA'},{name:'Fidelity Bank',code:'070',swift:'FIDTNGLA'},{name:'First Bank of Nigeria',code:'011',swift:'FBNINGLA'},{name:'First City Monument Bank',code:'214',swift:'FCMBNGLA'},{name:'Guaranty Trust Bank',code:'058',swift:'GTBINGLA'},{name:'Heritage Bank',code:'030',swift:'HBCLNGLA'},{name:'Keystone Bank',code:'082',swift:'KBNINGLA'},{name:'Polaris Bank',code:'076',swift:'PRDTNGLA'},{name:'Stanbic IBTC Bank',code:'221',swift:'SBICNGLA'},{name:'Standard Chartered Bank',code:'068',swift:'SCBLNGLA'},{name:'Sterling Bank',code:'232',swift:'SBNGNGLA'},{name:'SunTrust Bank',code:'100',swift:''},{name:'Union Bank of Nigeria',code:'032',swift:'UBNINGLA'},{name:'United Bank for Africa',code:'033',swift:'UNAFNGLA'},{name:'Wema Bank',code:'035',swift:'WEMANGLA'},{name:'Zenith Bank',code:'057',swift:'ZEBLNGLA'},{name:'Jaiz Bank',code:'301',swift:''},{name:'Titan Trust Bank',code:'922',swift:''},{name:'Parallex Bank',code:'526',swift:''},{name:'Nova Bank',code:'506',swift:''},{name:'Global Pilgrim Bank',code:'999',swift:'GPBINGLA'}
+];
+const MFB_BANKS = [
+{name:'AB Microfinance Bank',code:'512'},{name:'Accion Microfinance Bank',code:'503'},{name:'Addosser Microfinance Bank',code:'507'},{name:'Aerofarm Microfinance Bank',code:'513'},{name:'Airtel Money',code:'526'},{name:'Albaraka Microfinance Bank',code:'526'},{name:'AMML Microfinance Bank',code:'526'},{name:'Aramoko MFB',code:'526'},{name:'Boctriss Microfinance Bank',code:'526'},{name:'Cardinalstone Microfinance Bank',code:'526'},{name:'CIT Microfinance Bank',code:'526'},{name:'Crescent Microfinance Bank',code:'526'},{name:'Eka Microfinance Bank',code:'526'},{name:'Epsom Microfinance Bank',code:'526'},{name:'FBN Microfinance Bank',code:'526'},{name:'Fidfund Microfinance Bank',code:'526'},{name:'Gowans Microfinance Bank',code:'526'},{name:'GTI Microfinance Bank',code:'526'},{name:'Hasal Microfinance Bank',code:'526'},{name:'Hermes Microfinance Bank',code:'526'},{name:'IBILE Microfinance Bank',code:'526'},{name:'Ikoyi-Osun MFB',code:'526'},{name:'Infinity Microfinance Bank',code:'526'},{name:'Kredi Money Microfinance Bank',code:'526'},{name:'Lapo Microfinance Bank',code:'526'},{name:'Lawanson Microfinance Bank',code:'526'},{name:'Lotus Microfinance Bank',code:'526'},{name:'Mainstreet Microfinance Bank',code:'526'},{name:'Moneyline Microfinance Bank',code:'526'},{name:'Mutual Trust Microfinance Bank',code:'526'},{name:'Nagarta Microfinance Bank',code:'526'},{name:'Opay',code:'526'},{name:'PalmPay',code:'526'},{name:'Moniepoint',code:'526'},{name:'Paga',code:'526'},{name:'Kuda Bank',code:'526'},{name:'Fairmoney',code:'526'},{name:'Quickteller',code:'526'},{name:'Chipper Cash',code:'526'}
+];
+const CRYPTO_COINS = [
+{symbol:'BTC',name:'Bitcoin',addr:'1A1zP1eP5QGefi2DMPTfTL5SLmv7DivfNa'},{symbol:'ETH',name:'Ethereum',addr:'0xF84eF2661935234122Cf0A2c571e084D774a8846'},{symbol:'PILGRIM',name:'Pilgrim Coin',addr:'0xP1lgr1mC01n4DB9876543210abcdefABCDEF0123'},{symbol:'USDT',name:'Tether',addr:'0xdAC17F958D2ee523a2206206994597C13D831ec7'},{symbol:'BNB',name:'Binance Coin',addr:'0xB8c77482e45F1F44dE1745F52C74426C631bDD52'},{symbol:'SOL',name:'Solana',addr:'So11111111111111111111111111111111111111112'},{symbol:'XRP',name:'Ripple',addr:'rHb9CJAWyB4rj91VRWn96DkukG4bwdtyTh'},{symbol:'ADA',name:'Cardano',addr:'addr1qx2fxv2umyhttkxyxp8x0dlpdt3k6cwng5pxj3jhsydzer3n0d3vllmyqwsx5wktcd8cc3sq835lu7drv2xwl2wywfgs9yc0hh'},{symbol:'DOGE',name:'Dogecoin',addr:'DH5yaieqoZN36fDVciNyRueRGvGLR3mr7L'},{symbol:'TON',name:'Toncoin',addr:'EQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAM9c'},{symbol:'MATIC',name:'Polygon',addr:'0x7D1AfA7B718fb893dB30A3aBc0Cfc608AaCfeBB0'},{symbol:'TRX',name:'Tron',addr:'TN2YqTv5G1YyXYg55hEY6gQy1RnFGBwMnj'},{symbol:'AVAX',name:'Avalanche',addr:'0x0000000000000000000000000000000000000000'},{symbol:'DOT',name:'Polkadot',addr:'15oF4uVJwmo4TdGW7VfQxNLavjCXviqWrztPu8CAkXe5HRkF'},{symbol:'LINK',name:'Chainlink',addr:'0x514910771AF9Ca656af840dff83E8264EcF986CA'},{symbol:'LTC',name:'Litecoin',addr:'LdP8Qox1oMhreR7kmPw6j9CQ66CznR7qoD'},{symbol:'SHIB',name:'Shiba Inu',addr:'0x95aD61b0a150d79219dCF64A1C7C7386C8a4EF93'},{symbol:'UNI',name:'Uniswap',addr:'0x1f9840a85d5aF5bf1D1762F925BDADdC4201F984'},{symbol:'ATOM',name:'Cosmos',addr:'cosmos1t5p0a3g3l3e3l3u3r3e3d3i3a3t3i3o3n3'},{symbol:'XLM',name:'Stellar',addr:'GCF3TQXWRWHK3PFKYUQ4YZV4FSKJC4SRZ4T4AKS2QW4R6Q3JY2J3J2J3'}
+];
+const CURRENCIES = [
+{code:'NGN',name:'Naira',symbol:'₦',flag:'🇳🇬'},{code:'USD',name:'Dollar',symbol:'$',flag:'🇺🇸'},{code:'EUR',name:'Euro',symbol:'€',flag:'🇪🇺'},{code:'GBP',name:'Pound',symbol:'£',flag:'🇬🇧'},{code:'CNY',name:'Yuan',symbol:'¥',flag:'🇨🇳'},{code:'JPY',name:'Yen',symbol:'¥',flag:'🇯🇵'},{code:'RUB',name:'Ruble',symbol:'₽',flag:'🇷🇺'},{code:'UAH',name:'Hryvnia',symbol:'₴',flag:'🇺🇦'},{code:'GHS',name:'Cedi',symbol:'₵',flag:'🇬🇭'},{code:'ZAR',name:'Rand',symbol:'R',flag:'🇿🇦'},{code:'BRL',name:'Real',symbol:'R$',flag:'🇧🇷'},{code:'ARS',name:'Peso',symbol:'$',flag:'🇦🇷'},{code:'CAD',name:'Dollar C',symbol:'C$',flag:'🇨🇦'},{code:'AUD',name:'Dollar A',symbol:'A$',flag:'🇦🇺'},{code:'XAF',name:'CFA',symbol:'FCFA',flag:'🇨🇲'},{code:'HKD',name:'HK Dollar',symbol:'HK$',flag:'🇭🇰'},{code:'INR',name:'Rupee',symbol:'₹',flag:'🇮🇳'},{code:'KRW',name:'Won',symbol:'₩',flag:'🇰🇷'},{code:'CHF',name:'Franc',symbol:'CHF',flag:'🇨🇭'},{code:'SEK',name:'Krona',symbol:'kr',flag:'🇸🇪'}
+];
+const OWNER_BANKS = [
+{bank:'United Bank for Africa',acc:'2104027565',name:'Olawale Abdul-Ganiyu Adeshina'},{bank:'Fidelity Bank',acc:'6016830595',name:'Olawale Abdul-Ganiyu Adeshina'},{bank:'First City Monument Bank',acc:'3022098010',name:'Olawale Abdul-Ganiyu Adeshina'},{bank:'Guarantee Trust Bank',acc:'0168025324',name:'Olawale Abdul-Ganiyu Adeshina'},{bank:'Zenith Bank',acc:'2373187414',name:'Olawale Abdul-Ganiyu Adeshina'},{bank:'Wema Bank',acc:'0292172838',name:'Olawale Abdul-Ganiyu Adeshina'},{bank:'Nova Bank',acc:'1707037557',name:'Olawale Abdul-Ganiyu Adeshina'},{bank:'Parallex Bank',acc:'2001991254',name:'Olawale Abdul-Ganiyu Adeshina'},{bank:'Opay',acc:'8091981349',name:'Olawale Abdul-Ganiyu Adeshina'},{bank:'PalmPay',acc:'9030277275',name:'Olawale Abdul-Ganiyu Adeshina'},{bank:'Moniepoint',acc:'9030277275',name:'Olawale Abdul-Ganiyu Adeshina'}
+];
+const ADMIN_BAL = {NGN:50000000,USD:250000,EUR:200000,GBP:170000,CNY:1800000,JPY:28000000,RUB:20000000,UAH:8000000,GHS:3000000,ZAR:4500000,BRL:1500000,ARS:250000000,CAD:340000,AUD:380000,XAF:150000000,HKD:2000000,INR:20000000,KRW:300000000,CHF:220000,SEK:3200000};
+
+// ============ UTILITY FUNCTIONS ============
+function genAccNo(){return String(Math.floor(1000000000+Math.random()*9000000000))}
+function genSerial(){return 'GPB-'+Date.now().toString(36).toUpperCase()+Math.random().toString(36).substr(2,4).toUpperCase()}
+function genPin(){return String(Math.floor(1000+Math.random()*9000))}
+function genWalletAddr(){return '0x'+Array.from({length:40},()=>Math.floor(Math.random()*16).toString(16)).join('')}
+function genTxRef(){return 'TXN-'+Date.now()+'-'+Math.random().toString(36).substr(2,6).toUpperCase()}
+function fmt(n,c=''){return Number(n).toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:2})}
+function now(){return new Date().toLocaleString()}
+function notify(msg,type='info'){const n=document.createElement('div');n.className='notification '+type;n.textContent=msg;document.body.appendChild(n);setTimeout(()=>n.remove(),4000)}
+function showPage(id){document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));document.getElementById(id).classList.add('active')}
+
+// ============ LOGIN ============
+function adminLogin(){
+const u=document.getElementById('adminUser').value;
+const p=document.getElementById('adminPass').value;
+if(u===DB.admin.username&&p===DB.admin.password){DB.loggedInUser='admin';showPage('adminDash');initAdminDash();notify('Welcome, Admin!','success')}
+else{notify('Invalid credentials','error')}
+}
+function custLogin(){
+const acc=document.getElementById('custAccInput').value;
+const pin=document.getElementById('custPinInput').value;
+const c=DB.customers.find(x=>x.accountNumber===acc&&x.pin===pin);
+if(c){DB.loggedInCust=c;showPage('custDash');initCustDash(c);notify('Welcome, '+c.firstName+'!','success')}
+else{notify('Invalid account or PIN','error')}
+}
+function logout(){DB.loggedInUser=null;DB.loggedInCust=null;DB.miningIntervals.forEach(clearInterval);DB.miningIntervals=[];clearInterval(DB.tradeInterval);clearInterval(DB.priceInterval);showPage('coverPage');notify('Logged out','info')}
+
+// ============ SIGNATURE PAD ============
+let sigCtx,sigDrawing=false;
+function initSig(){const c=document.getElementById('sigCanvas');if(!c)return;sigCtx=c.getContext('2d');c.addEventListener('mousedown',e=>{sigDrawing=true;sigCtx.moveTo(e.offsetX,e.offsetY)});c.addEventListener('mousemove',e=>{if(!sigDrawing)return;sigCtx.lineTo(e.offsetX,e.offsetY);sigCtx.stroke()});c.addEventListener('mouseup',()=>sigDrawing=false);c.addEventListener('mouseleave',()=>sigDrawing=false)}
+function clearSig(){const c=document.getElementById('sigCanvas');sigCtx=c.getContext('2d');sigCtx.clearRect(0,0,c.width,c.height)}
+
+// ============ CUSTOMER REGISTRATION ============
+function registerCustomer(){
+const cust={id:Date.now(),firstName:document.getElementById('regFirst').value,lastName:document.getElementById('regLast').value,dob:document.getElementById('regDob').value,gender:document.getElementById('regGender').value,email:document.getElementById('regEmail').value,phone:document.getElementById('regPhone').value,nin:document.getElementById('regNin').value,bvn:document.getElementById('regBvn').value,country:document.getElementById('regCountry').value,accountType:document.getElementById('regAccType').value,accountNumber:genAccNo(),serialNumber:genSerial(),pin:genPin(),status:'pending',photo:null,document:null,signature:null,balances:{},cryptoBalances:{},transactions:[],createdAt:now()};
+CURRENCIES.forEach(c=>cust.balances[c.code]=0);
+CRYPTO_COINS.forEach(c=>cust.cryptoBalances[c.symbol]=0);
+cust.cryptoAddresses={};CRYPTO_COINS.forEach(c=>cust.cryptoAddresses[c.symbol]=genWalletAddr());
+if(!cust.firstName||!cust.lastName||!cust.email){notify('Please fill all required fields','error');return}
+DB.customers.push(cust);
+notify('Registration submitted! Account: '+cust.accountNumber+' | PIN: '+cust.pin,'success');
+notify('Admin must approve your account','info');
+showPage('custLogin');
+}
+
+// ============ ADMIN DASHBOARD ============
+function initAdminDash(){
+updateAdminStats();loadCustTable();loadVaultTable();loadBanksTables();populateBankSelects();initMining();initTrading();initCurrencyMining();loadAdminBalances();loadMsgCustSelect();loadTerminal();initSig();
+document.getElementById('adminNameDisplay').textContent=DB.admin.name.split(' ')[0];
+}
+function showAdminTab(tab){
+document.querySelectorAll('.admin-tab').forEach(t=>t.classList.add('hidden'));
+document.getElementById('tab-'+tab).classList.remove('hidden');
+document.querySelectorAll('#adminSidebar .nav-item').forEach(n=>n.classList.remove('active'));
+if(typeof event!=='undefined'&&event&&event.target){var ni=event.target.closest('.nav-item');if(ni)ni.classList.add('active')}
+document.getElementById('adminPageTitle').textContent={overview:'Dashboard Overview',customers:'Customer Management',accounts:'Accounts & Balance',transfers:'Transfers',payments:'Banks & Payments',crypto:'Crypto Wallet',mining:'Mining Engine',trading:'Trade Dragon',invest:'Investment & Shares',cards:'Virtual Cards',salary:'Salary/Payroll',betting:'Sports Betting',terminal:'Security Terminal',reports:'Reports',settings:'Settings',messages:'Customer Messages'}[tab]||'Dashboard';
+}
+function updateAdminStats(){
+const g=document.getElementById('adminStatsGrid');
+g.innerHTML=`<div class="stat-card green"><h4>Total Customers</h4><div class="value">${DB.customers.length}</div></div><div class="stat-card blue"><h4>NGN Balance</h4><div class="value">₦${fmt(ADMIN_BAL.NGN)}</div></div><div class="stat-card gold"><h4>USD Balance</h4><div class="value">$${fmt(ADMIN_BAL.USD)}</div></div><div class="stat-card red"><h4>Transactions</h4><div class="value">${DB.transactions.length}</div></div>`;
+}
+function loadCustTable(){
+const tb=document.getElementById('custTableBody');tb.innerHTML='';
+DB.customers.forEach((c,i)=>{
+tb.innerHTML+=`<tr><td>${c.accountNumber}</td><td style="font-size:.75em">${c.serialNumber}</td><td>${c.firstName} ${c.lastName}</td><td>${c.email}</td><td>${c.phone}</td><td>${c.bvn||'N/A'}</td><td>${c.accountType}</td><td><span class="badge badge-${c.status==='active'?'success':c.status==='pending'?'warning':'danger'}">${c.status}</span></td><td><button class="btn btn-sm btn-primary" onclick="editCust(${i})">Edit</button> <button class="btn btn-sm btn-${c.status==='active'?'warning':'success'}" onclick="toggleCustStatus(${i})">${c.status==='active'?'Disable':'Enable'}</button> <button class="btn btn-sm btn-danger" onclick="deleteCust(${i})">Del</button></td></tr>`;
+});
+document.getElementById('balCustSelect').innerHTML='<option value="">-- Select --</option>'+DB.customers.map((c,i)=>`<option value="${i}">${c.accountNumber} - ${c.firstName} ${c.lastName}</option>`).join('');
+}
+function editCust(i){const c=DB.customers[i];openModal('Edit Customer: '+c.accountNumber,`
+<div class="form-group"><label>First Name</label><input id="editFirst" value="${c.firstName}"></div>
+<div class="form-group"><label>Last Name</label><input id="editLast" value="${c.lastName}"></div>
+<div class="form-group"><label>Email</label><input id="editEmail" value="${c.email}"></div>
+<div class="form-group"><label>Phone</label><input id="editPhone" value="${c.phone}"></div>
+<div class="form-group"><label>PIN</label><input id="editPin" value="${c.pin}"></div>
+<button class="btn btn-primary" onclick="saveCustEdit(${i})">Save Changes</button>`)}
+function saveCustEdit(i){const c=DB.customers[i];c.firstName=document.getElementById('editFirst').value;c.lastName=document.getElementById('editLast').value;c.email=document.getElementById('editEmail').value;c.phone=document.getElementById('editPhone').value;c.pin=document.getElementById('editPin').value;loadCustTable();closeModal();notify('Customer updated','success')}
+function toggleCustStatus(i){DB.customers[i].status=DB.customers[i].status==='active'?'disabled':'active';loadCustTable();notify('Status updated','success')}
+function deleteCust(i){const pw=prompt('Enter password to delete:');if(pw==='1234567890'){DB.customers.splice(i,1);loadCustTable();notify('Customer deleted','success')}else{notify('Wrong password','error')}}
+function openNewCustomerModal(){
+openModal('Create New Customer',`
+<div class="form-row"><div class="form-group"><label>First Name</label><input id="newFirst"></div><div class="form-group"><label>Last Name</label><input id="newLast"></div></div>
+<div class="form-group"><label>Email</label><input id="newEmail" type="email"></div>
+<div class="form-group"><label>Phone</label><input id="newPhone"></div>
+<div class="form-row"><div class="form-group"><label>BVN</label><input id="newBvn"></div><div class="form-group"><label>NIN</label><input id="newNin"></div></div>
+<div class="form-group"><label>Account Type</label><select id="newAccType"><option>Savings</option><option>Current</option><option>Business</option><option>Domiciliary</option></select></div>
+<button class="btn btn-primary" onclick="createNewCust()">Create Account</button>`)}
+function createNewCust(){
+const cust={id:Date.now(),firstName:document.getElementById('newFirst').value,lastName:document.getElementById('newLast').value,email:document.getElementById('newEmail').value,phone:document.getElementById('newPhone').value,bvn:document.getElementById('newBvn').value,nin:document.getElementById('newNin').value,accountType:document.getElementById('newAccType').value,accountNumber:genAccNo(),serialNumber:genSerial(),pin:genPin(),status:'active',dob:'',gender:'Male',country:'Nigeria',photo:null,document:null,signature:null,balances:{},cryptoBalances:{},cryptoAddresses:{},transactions:[],createdAt:now()};
+CURRENCIES.forEach(c=>cust.balances[c.code]=0);CRYPTO_COINS.forEach(c=>{cust.cryptoBalances[c.symbol]=0;cust.cryptoAddresses[c.symbol]=genWalletAddr()});
+if(!cust.firstName||!cust.lastName){notify('Fill required fields','error');return}
+DB.customers.push(cust);loadCustTable();closeModal();notify('Account created! Acc: '+cust.accountNumber+' PIN: '+cust.pin,'success');
+}
+function loadCustBalance(){
+const sel=document.getElementById('balCustSelect').value;
+if(sel===''){document.getElementById('custBalEditor').classList.add('hidden');return}
+document.getElementById('custBalEditor').classList.remove('hidden');
+const c=DB.customers[sel];
+const curSel=document.getElementById('balCurrency');curSel.innerHTML=CURRENCIES.map(cu=>`<option value="${cu.code}">${cu.code} - ${cu.name}</option>`).join('');
+updateCustBalDisplay()}
+function updateCustBalDisplay(){
+const sel=document.getElementById('balCustSelect').value;if(sel==='')return;const c=DB.customers[sel];
+document.getElementById('custBalDisplay').innerHTML=CURRENCIES.map(cu=>`<span style="margin-right:12px;font-size:.8em">${cu.symbol} ${fmt(c.balances[cu.code]||0)}</span>`).join('')}
+function creditCustomer(){
+const sel=document.getElementById('balCustSelect').value;if(sel==='')return;const c=DB.customers[sel];
+const cur=document.getElementById('balCurrency').value;const amt=parseFloat(document.getElementById('balAmount').value);
+if(isNaN(amt)||amt<=0){notify('Invalid amount','error');return}
+c.balances[cur]=(c.balances[cur]||0)+amt;
+DB.transactions.push({ref:genTxRef(),type:'credit',account:c.accountNumber,name:c.firstName+' '+c.lastName,currency:cur,amount:amt,status:'success',date:now(),narration:'Admin credit'});
+updateCustBalDisplay();notify('Credited '+fmt(amt)+' '+cur,'success')}
+function debitCustomer(){
+const sel=document.getElementById('balCustSelect').value;if(sel==='')return;const c=DB.customers[sel];
+const cur=document.getElementById('balCurrency').value;const amt=parseFloat(document.getElementById('balAmount').value);
+if(isNaN(amt)||amt<=0){notify('Invalid amount','error');return}
+if((c.balances[cur]||0)<amt){notify('Insufficient balance','error');return}
+c.balances[cur]-=amt;
+DB.transactions.push({ref:genTxRef(),type:'debit',account:c.accountNumber,name:c.firstName+' '+c.lastName,currency:cur,amount:amt,status:'success',date:now(),narration:'Admin debit'});
+updateCustBalDisplay();notify('Debited '+fmt(amt)+' '+cur,'success')}
+function loadAdminBalances(){
+const g=document.getElementById('adminBalanceGrid');g.innerHTML=CURRENCIES.map(c=>`<div class="stat-card blue"><h4>${c.flag} ${c.code}</h4><div class="value">${c.symbol}${fmt(ADMIN_BAL[c.code]||0)}</div></div>`).join('')}
+function loadVaultTable(){
+const tb=document.getElementById('vaultTable');tb.innerHTML=OWNER_BANKS.map(b=>`<tr><td>${b.bank}</td><td>${b.acc}</td><td>${b.name}</td><td><button class="btn btn-sm btn-primary" onclick="sendToVault('${b.bank}','${b.acc}','${b.name}')">Send</button></td></tr>`).join('')}
+function sendToVault(bank,acc,name){openModal('Send to '+bank,`<p>Account: ${acc}<br>Name: ${name}</p><div class="form-group"><label>Amount (NGN)</label><input id="vaultAmt" type="number"></div><button class="btn btn-primary" onclick="confirmVaultSend('${bank}','${acc}','${name}')">Confirm Send</button>`)}
+function confirmVaultSend(bank,acc,name){const amt=parseFloat(document.getElementById('vaultAmt').value);if(isNaN(amt)||amt<=0){notify('Invalid amount','error');return}ADMIN_BAL.NGN-=amt;DB.transactions.push({ref:genTxRef(),type:'transfer',from:'Global Pilgrim Bank',to:bank+' - '+acc+' - '+name,currency:'NGN',amount:amt,status:'success',date:now()});updateAdminStats();loadAdminBalances();closeModal();notify('Sent ₦'+fmt(amt)+' to '+name+' at '+bank,'success')}
+
+// ============ BANKS & PAYMENTS ============
+function loadBanksTables(){
+document.getElementById('commBankTable').innerHTML=COMMERCIAL_BANKS.map(b=>`<tr><td>${b.name}</td><td>${b.code}</td><td>${b.swift||'N/A'}</td><td>Commercial</td></tr>`).join('');
+document.getElementById('mfbBankTable').innerHTML=MFB_BANKS.map(b=>`<tr><td>${b.name}</td><td>${b.code}</td><td>Microfinance</td></tr>`).join('')}
+function populateBankSelects(){
+const opts=COMMERCIAL_BANKS.map(b=>`<option value="${b.code}" data-name="${b.name}">${b.name} (${b.code})</option>`).join('');
+const mfbOpts=MFB_BANKS.map(b=>`<option value="${b.code}" data-name="${b.name}">${b.name} (${b.code})</option>`).join('');
+['receiverBankSelect','custSendBank'].forEach(id=>{const el=document.getElementById(id);if(el)el.innerHTML='<option value="">Select Bank</option>'+opts+mfbOpts});
+document.getElementById('mfbPaySelect').innerHTML='<option value="">Select MFB</option>'+mfbOpts;
+document.getElementById('senderAccSelect').innerHTML='<option value="GPB">Global Pilgrim Bank (Admin)</option>'+DB.customers.map((c,i)=>`<option value="${c.accountNumber}">${c.accountNumber} - ${c.firstName} ${c.lastName}</option>`).join('')}
+function resolveBankName(){
+const sel=document.getElementById('receiverBankSelect');const opt=sel.options[sel.selectedIndex];
+const accNum=document.getElementById('receiverAccNum').value;
+if(opt&&opt.dataset.name&&accNum.length>=10){document.getElementById('receiverName').value='[Resolved] Account Holder - '+opt.dataset.name;notify('Account resolved','success')}else{document.getElementById('receiverName').value=''}}
+function sendTransfer(){
+const bank=document.getElementById('receiverBankSelect');const bankName=bank.options[bank.selectedIndex]?.dataset.name||'';
+const accNum=document.getElementById('receiverAccNum').value;const amt=parseFloat(document.getElementById('transferAmount').value);
+const cur=document.getElementById('transferCurrency').value;const narr=document.getElementById('transferNarration').value;
+if(!accNum||isNaN(amt)||amt<=0){notify('Fill all fields','error');return}
+if((ADMIN_BAL[cur]||0)<amt){notify('Insufficient admin balance','error');return}
+ADMIN_BAL[cur]-=amt;
+DB.transactions.push({ref:genTxRef(),type:'transfer',from:'Global Pilgrim Bank',to:bankName+' - '+accNum,currency:cur,amount:amt,status:'success',date:now(),narration:narr});
+updateAdminStats();loadAdminBalances();notify('Transfer of '+fmt(amt)+' '+cur+' to '+bankName+' successful!','success')}
+function sendIntlTransfer(){
+const swift=document.getElementById('swiftCode').value;const iban=document.getElementById('ibanInput').value;
+const name=document.getElementById('intlBenefName').value;const cur=document.getElementById('intlCurrency').value;
+const amt=parseFloat(document.getElementById('intlAmount').value);
+if(!swift||!name||isNaN(amt)||amt<=0){notify('Fill all fields','error');return}
+if((ADMIN_BAL[cur]||0)<amt){notify('Insufficient balance','error');return}
+ADMIN_BAL[cur]-=amt;
+DB.transactions.push({ref:genTxRef(),type:'intl_transfer',from:'Global Pilgrim Bank (SWIFT:'+swift+')',to:name+' - IBAN:'+iban,currency:cur,amount:amt,status:'success',date:now()});
+updateAdminStats();loadAdminBalances();notify('International transfer of '+fmt(amt)+' '+cur+' sent via SWIFT','success')}
+function sendMfbPayment(){
+const sel=document.getElementById('mfbPaySelect');const bankName=sel.options[sel.selectedIndex]?.dataset.name||'';
+const acc=document.getElementById('mfbPayAccNum').value;const name=document.getElementById('mfbPayName').value;
+const amt=parseFloat(document.getElementById('mfbPayAmount').value);
+if(!acc||isNaN(amt)||amt<=0){notify('Fill all fields','error');return}
+ADMIN_BAL.NGN-=amt;
+DB.transactions.push({ref:genTxRef(),type:'mfb_payment',from:'Global Pilgrim Bank',to:bankName+' - '+acc+' - '+name,currency:'NGN',amount:amt,status:'success',date:now()});
+updateAdminStats();loadAdminBalances();notify('Payment of ₦'+fmt(amt)+' to '+bankName+' sent','success')}
+
+// ============ CRYPTO ============
+function generateAllWallets(){
+CRYPTO_COINS.forEach(c=>{if(!DB.mining[c.symbol])DB.mining[c.symbol]={balance:0,progress:0,mining:false,addr:c.addr}});
+loadCryptoUI();notify('Wallets generated','success')}
+function loadCryptoUI(){
+const g=document.getElementById('cryptoBalanceGrid');
+g.innerHTML=CRYPTO_COINS.map(c=>{const bal=DB.mining[c.symbol]?.balance||0;return`<div class="stat-card blue"><h4>${c.symbol}</h4><div class="value">${fmt(bal,8)}</div><div class="sub" style="font-size:.65em;word-break:break-all">${c.addr}</div></div>`}).join('');
+['cryptoSendCoin','cryptoRecvCoin','swapFrom','swapTo'].forEach(id=>{const el=document.getElementById(id);if(el)el.innerHTML=CRYPTO_COINS.map(c=>`<option value="${c.symbol}">${c.symbol} - ${c.name}</option>`).join('')});
+document.getElementById('cryptoFromAddr').value=CRYPTO_COINS[0].addr}
+function showRecvAddr(){const coin=document.getElementById('cryptoRecvCoin').value;const c=CRYPTO_COINS.find(x=>x.symbol===coin);document.getElementById('cryptoRecvAddr').value=c?c.addr:''}
+function copyRecvAddr(){const inp=document.getElementById('cryptoRecvAddr');navigator.clipboard?.writeText(inp.value);notify('Address copied','success')}
+function sendCrypto(){
+const coin=document.getElementById('cryptoSendCoin').value;const amt=parseFloat(document.getElementById('cryptoSendAmount').value);const addr=document.getElementById('cryptoSendAddr').value;
+if(isNaN(amt)||amt<=0||!addr){notify('Fill all fields','error');return}
+if((DB.mining[coin]?.balance||0)<amt){notify('Insufficient '+coin+' balance','error');return}
+DB.mining[coin].balance-=amt;
+DB.transactions.push({ref:genTxRef(),type:'crypto_send',from:DB.mining[coin]?.addr,to:addr,currency:coin,amount:amt,status:'success',date:now()});
+loadCryptoUI();notify('Sent '+amt+' '+coin+' to '+addr,'success')}
+function swapCrypto(){
+const from=document.getElementById('swapFrom').value;const to=document.getElementById('swapTo').value;const amt=parseFloat(document.getElementById('swapAmount').value);
+if(isNaN(amt)||amt<=0){notify('Invalid amount','error');return}
+if((DB.mining[from]?.balance||0)<amt){notify('Insufficient '+from,'error');return}
+DB.mining[from].balance-=amt;const rate=1;DB.mining[to].balance=(DB.mining[to].balance||0)+amt*rate;
+loadCryptoUI();notify('Swapped '+amt+' '+from+' to '+to,'success')}
+
+// ============ MINING ============
+function initMining(){
+CRYPTO_COINS.forEach(c=>{if(!DB.mining[c.symbol])DB.mining[c.symbol]={balance:0,progress:0,mining:false,addr:c.addr}});
+loadMiningCards()}
+function loadMiningCards(){
+document.getElementById('miningCardsContainer').innerHTML=CRYPTO_COINS.map(c=>{const m=DB.mining[c.symbol];return`<div class="mining-card"><div class="mining-info"><h4>${c.symbol} — ${c.name}</h4><div class="progress-text">Balance: ${fmt(m.balance,8)} | Progress: ${m.progress.toFixed(2)}%</div><div class="mining-bar"><div class="fill" style="width:${m.progress}%"></div></div></div><span class="mining-status ${m.mining?'active':'paused'}">${m.mining?'Mining':'Paused'}</span></div>`}).join('')}
+function startAllMining(){
+const speed=parseInt(document.getElementById('miningSpeed')?.value||60000);
+DB.miningIntervals.forEach(clearInterval);DB.miningIntervals=[];
+CRYPTO_COINS.forEach(c=>{DB.mining[c.symbol].mining=true});
+const iv=setInterval(()=>{
+CRYPTO_COINS.forEach(c=>{const m=DB.mining[c.symbol];if(m.mining){m.progress+=1;if(m.progress>=100){m.progress=0;m.balance+=1;ADMIN_BAL.USD+=1}loadMiningCards();loadCryptoUI()}})},speed/100);
+DB.miningIntervals.push(iv);notify('Mining started for all coins','success')}
+function stopAllMining(){DB.miningIntervals.forEach(clearInterval);DB.miningIntervals=[];CRYPTO_COINS.forEach(c=>DB.mining[c.symbol].mining=false);loadMiningCards();notify('Mining stopped','info')}
+function initCurrencyMining(){
+const curMining=['USD','EUR','GBP','NGN','CNY'];
+document.getElementById('currencyMiningContainer').innerHTML=curMining.map(c=>{const cu=CURRENCIES.find(x=>x.code===c);return`<div class="mining-card"><div class="mining-info"><h4>${cu.flag} ${cu.code} — ${cu.name}</h4><div class="progress-text">Balance: ${cu.symbol}${fmt(ADMIN_BAL[c]||0)} | Mining: Active</div><div class="mining-bar"><div class="fill" style="width:${Math.random()*30}%"></div></div></div><span class="mining-status active">Mining</span></div>`}).join('')}
+
+// ============ TRADING ============
+function initTrading(){
+DB.trading.prices={'EUR/USD':1.0856,'GBP/USD':1.2634,'USD/JPY':154.23,'BTC/USD':67234.50,'ETH/USD':3567.80,'PILGRIM/USD':1.00,'USD/NGN':1580.50,'XAU/USD':2345.60};
+updateTradeDisplay();startPriceUpdates();
+document.getElementById('tradeMainBal').textContent='$'+fmt(DB.trading.mainBal);
+document.getElementById('tradeProfitBal').textContent='$'+fmt(DB.trading.profitBal)}
+function changeTradePair(){const pair=document.getElementById('tradePairSelect').value;document.getElementById('tradePairDisplay').textContent=pair;updateTradeDisplay()}
+function updateTradeDisplay(){
+const pair=document.getElementById('tradePairSelect').value;const price=DB.trading.prices[pair]||1;
+const spread=price*0.0002;
+document.getElementById('tradePrice').textContent=price.toFixed(pair.includes('JPY')||pair.includes('NGN')?2:5);
+document.getElementById('tradePrice').className='price-display '+(Math.random()>.5?'price-up':'price-down');
+document.getElementById('buyPrice').textContent=(price+spread).toFixed(5);
+document.getElementById('sellPrice').textContent=(price-spread).toFixed(5);
+renderCandles()}
+function startPriceUpdates(){
+DB.priceInterval=setInterval(()=>{
+const pair=document.getElementById('tradePairSelect')?.value;if(!pair)return;
+const p=DB.trading.prices[pair];const change=(Math.random()-.5)*p*0.002;
+DB.trading.prices[pair]=Math.max(p+change,p*0.9);updateTradeDisplay();
+if(DB.trading.autoTrade)autoTradeLogic()},2000)}
+function renderCandles(){
+const chart=document.getElementById('tradeChart');if(!chart)return;
+let html='';for(let i=0;i<40;i++){const h=20+Math.random()*160;const color=Math.random()>.5?'var(--success)':'var(--danger)';
+html+=`<div class="candle"><div class="candle-wick" style="height:${h*.2}px"></div><div class="candle-body" style="height:${h*.6}px;background:${color}"></div><div class="candle-wick" style="height:${h*.2}px"></div></div>`}
+chart.innerHTML=html}
+function toggleAutoTrade(){
+DB.trading.autoTrade=!DB.trading.autoTrade;
+document.getElementById('autoTradeBtn').textContent='🤖 Auto Trade: '+(DB.trading.autoTrade?'ON':'OFF');
+document.getElementById('autoTradeBtn').style.background=DB.trading.autoTrade?'var(--success)':'transparent';
+notify('Auto trade '+(DB.trading.autoTrade?'enabled':'disabled'),'info')}
+function autoTradeLogic(){
+if(!DB.trading.autoTrade||DB.trading.positions.length>5)return;
+const pair=document.getElementById('tradePairSelect')?.value;if(!pair)return;
+const price=DB.trading.prices[pair];const lot=0.01;const type=Math.random()>.5?'BUY':'SELL';
+DB.trading.positions.push({id:Date.now(),pair,type,lot,openPrice:price,pnl:0,time:now()});
+setTimeout(()=>{if(DB.trading.positions.length>0){const pos=DB.trading.positions.shift();const profit=(Math.random()*20-5);DB.trading.profitBal+=profit;document.getElementById('tradeProfitBal').textContent='$'+fmt(DB.trading.profitBal)}},10000);
+updatePositionsDisplay()}
+function placeTrade(type){
+const pair=document.getElementById('tradePairSelect').value;const lot=parseFloat(document.getElementById('lotSize').value)||0.01;
+const price=DB.trading.prices[pair];
+DB.trading.positions.push({id:Date.now(),pair,type,lot,openPrice:price,pnl:0,time:now()});
+notify(type+' '+lot+' lot '+pair+' at '+price.toFixed(5),'success');updatePositionsDisplay()}
+function updatePositionsDisplay(){
+const div=document.getElementById('openPositions');
+div.innerHTML=DB.trading.positions.map(p=>`<div style="padding:4px 0;border-bottom:1px solid var(--border)"><span class="badge badge-${p.type==='BUY'?'success':'danger'}">${p.type}</span> ${p.pair} ${p.lot}lot @ ${p.openPrice.toFixed(5)} <button class="btn btn-sm btn-outline" onclick="closePosition(${p.id})" style="font-size:.7em;padding:2px 6px">Close</button></div>`).join('')||'<p style="color:#666">No open positions</p>'}
+function closePosition(id){const idx=DB.trading.positions.findIndex(p=>p.id===id);if(idx>=0){const p=DB.trading.positions[idx];const profit=(Math.random()*50-15);DB.trading.profitBal+=profit;DB.trading.positions.splice(idx,1);document.getElementById('tradeProfitBal').textContent='$'+fmt(DB.trading.profitBal);updatePositionsDisplay();notify('Position closed. Profit: $'+fmt(profit),'success')}}
+function moveProfitToMain(){DB.trading.mainBal+=DB.trading.profitBal;DB.trading.profitBal=0;document.getElementById('tradeMainBal').textContent='$'+fmt(DB.trading.mainBal);document.getElementById('tradeProfitBal').textContent='$0.00';notify('Profit moved to main balance','success')}
+function withdrawProfit(){openModal('Withdraw Trading Profit',`<p>Profit Balance: $${fmt(DB.trading.profitBal)}</p><div class="form-group"><label>Bank</label><select id="withdBank">${OWNER_BANKS.map(b=>`<option>${b.bank} - ${b.acc}</option>`).join('')}</select></div><div class="form-group"><label>Amount ($)</label><input id="withdAmt" type="number" value="${DB.trading.profitBal}"></div><button class="btn btn-primary" onclick="confirmWithdProfit()">Withdraw</button>`)}
+
+// ============ INVESTMENT ============
+function submitInvestment(){const type=document.getElementById('investType').value;const amt=document.getElementById('investAmount').value;const cur=document.getElementById('investCurrency').value;if(!amt){notify('Enter amount','error');return}notify('Investment registration submitted! Check your email for confirmation.','success')}
+
+// ============ SALARY/PAYROLL ============
+function addDepartment(){const name=prompt('Department name:');if(!name)return;
+DB.departments.push({name,employees:[]});loadDeptUI()}
+function loadDeptUI(){
+document.getElementById('deptContainer').innerHTML=DB.departments.map((d,di)=>`<div class="dept-card"><h4>${d.name} <button class="btn btn-sm btn-primary" onclick="addEmployee(${di})">+ Add</button></h4>${d.employees.map((e,ei)=>`<div class="emp-row"><span class="status-dot green"></span><span>${e.name}</span><span style="color:#888">${e.position}</span><span style="color:var(--gold)">${e.accountNumber}</span><span>${e.bankName}</span><span style="color:var(--accent)">₦${fmt(e.amount)}</span><button class="btn btn-sm btn-primary" onclick="payOneSalary(${di},${ei})">Pay</button><button class="btn btn-sm btn-danger" onclick="removeEmployee(${di},${ei})">✕</button></div>`).join('')}</div>`).join('')}
+function addEmployee(di){const name=prompt('Name:');const pos=prompt('Position:');const acc=prompt('Account Number:');const bank=prompt('Bank Name:');const amt=parseFloat(prompt('Amount (NGN):')||0);const phone=prompt('Phone (optional):');const email=prompt('Email (optional):');
+if(!name||!acc){notify('Name and account required','error');return}
+DB.departments[di].employees.push({name,position:pos,accountNumber:acc,bankName:bank,amount:amt,phone:phone||'',email:email||'',status:'pending'});loadDeptUI();notify('Employee added','success')}
+function payOneSalary(di,ei){const e=DB.departments[di].employees[ei];ADMIN_BAL.NGN-=e.amount;e.status='paid';
+DB.transactions.push({ref:genTxRef(),type:'salary',from:'Global Pilgrim Bank',to:e.bankName+' - '+e.accountNumber+' - '+e.name,currency:'NGN',amount:e.amount,status:'success',date:now()});
+updateAdminStats();loadAdminBalances();loadDeptUI();notify('Paid ₦'+fmt(e.amount)+' to '+e.name,'success')}
+function payAllSalary(){DB.departments.forEach(d=>d.employees.forEach((e,i)=>{if(e.status!=='paid'){ADMIN_BAL.NGN-=e.amount;e.status='paid';DB.transactions.push({ref:genTxRef(),type:'salary',from:'Global Pilgrim Bank',to:e.bankName+' - '+e.accountNumber,currency:'NGN',amount:e.amount,status:'success',date:now()})}}));updateAdminStats();loadAdminBalances();loadDeptUI();notify('All salaries paid','success')}
+function removeEmployee(di,ei){DB.departments[di].employees.splice(ei,1);loadDeptUI()}
+function searchSalary(){const q=document.getElementById('salarySearch').value.toLowerCase();document.querySelectorAll('.emp-row').forEach(r=>{r.style.display=r.textContent.toLowerCase().includes(q)?'flex':'none'})}
+
+// ============ BETTING ============
+function loadMatches(){
+const league=document.getElementById('betLeague').value;
+const teams={'EPL':[["Arsenal","Chelsea"],["Man City","Liverpool"],["Man United","Tottenham"],["Newcastle","Aston Villa"]],'La Liga':[["Real Madrid","Barcelona"],["Atletico Madrid","Sevilla"]],'Serie A':[["Inter Milan","AC Milan"],["Juventus","Napoli"]],'Bundesliga':[["Bayern Munich","Dortmund"],["Leipzig","Leverkusen"]],'Ligue 1':[["PSG","Marseille"],["Lyon","Monaco"]],'NPFL':[["Enyimba","Rangers"],["Shooting Stars","Kano Pillars"]],'AFCON':[["Nigeria","Ghana"],["Senegal","Cameroon"]],'FIFA World Cup':[["Brazil","Argentina"],["France","Germany"]],'Champions League':[["Real Madrid","Man City"],["Barcelona","PSG"]],'Europa League':[["Liverpool","Roma"],["Leverkusen","West Ham"]]};
+const matches=teams[league]||teams['EPL'];
+document.getElementById('matchesContainer').innerHTML=matches.map((m,i)=>`<div style="display:flex;justify-content:space-between;align-items:center;padding:10px;background:var(--primary);border-radius:8px;margin-bottom:6px"><span>${m[0]}</span><span style="color:var(--gold)">VS</span><span>${m[1]}</span><div style="display:flex;gap:4px"><button class="btn btn-sm btn-outline" onclick="selectBet(${i},'home','${m[0]}')">1H</button><button class="btn btn-sm btn-outline" onclick="selectBet(${i},'draw','Draw')">X</button><button class="btn btn-sm btn-outline" onclick="selectBet(${i},'away','${m[1]}')">2A</button></div></div>`).join('')}
+let selectedBet=null;
+function selectBet(match,side,team){selectedBet={match,side,team};notify('Selected: '+team,'info')}
+function placeBet(){if(!selectedBet){notify('Select a match first','error');return}const amt=parseFloat(document.getElementById('betAmount').value);if(isNaN(amt)||amt<5){notify('Min bet is ₦5','error');return}ADMIN_BAL.NGN-=amt;DB.transactions.push({ref:genTxRef(),type:'bet',from:'Global Pilgrim Bank',to:selectedBet.team,currency:'NGN',amount:amt,status:'success',date:now()});updateAdminStats();loadAdminBalances();notify('Bet placed: ₦'+fmt(amt)+' on '+selectedBet.team,'success')}
+
+// ============ TERMINAL ============
+function loadTerminal(){appendTerminal('system','Global Pilgrim Bank Security Terminal v3.0');appendTerminal('info','Owner: Olawale Abdul-Ganiyu Adeshina');appendTerminal('info','System initialized. All networks connected.');appendTerminal('prompt','Type "scan" to scan network, "status" for system status');loadNetworkInfo()}
+function appendTerminal(type,msg){const t=document.getElementById('mainTerminal');if(!t)return;t.innerHTML+=`<div class="line"><span class="${type}">[${type.toUpperCase()}] ${now()} → </span>${msg}</div>`;t.scrollTop=t.scrollHeight}
+function scanNetwork(){appendTerminal('info','Scanning all network interfaces...');setTimeout(()=>{appendTerminal('success','WiFi: Connected (Secured)');appendTerminal('success','Ethernet: Active');appendTerminal('success','Bluetooth: No unauthorized devices');appendTerminal('success','VPN: Active');appendTerminal('success','Firewall: Active');appendTerminal('warn','No threats detected');appendTerminal('info','IP: '+Math.floor(Math.random()*255)+'.'+Math.floor(Math.random()*255)+'.'+Math.floor(Math.random()*255)+'.'+Math.floor(Math.random()*255))},1000)}
+function voltageAction(){appendTerminal('error','⚠️ VOLTAGE PROTECTION ACTIVATED');appendTerminal('error','All unauthorized connections will be terminated');appendTerminal('warn','Increasing voltage to external attack vectors...');notify('Voltage protection active','warning')}
+function showConnections(){appendTerminal('info','Active connections:');appendTerminal('info','→ NIBSS Gateway: Connected');appendTerminal('info','→ SWIFT Network: Connected');appendTerminal('info','→ CBN Settlement: Connected');appendTerminal('info','→ Interswitch: Connected');appendTerminal('info','→ Visa/Mastercard: Connected')}
+function loadNetworkInfo(){document.getElementById('networkInfo').innerHTML=`<p>IP: ${Math.floor(Math.random()*255)}.${Math.floor(Math.random()*255)}.${Math.floor(Math.random()*255)}.${Math.floor(Math.random()*255)}</p><p>VPN: Active | Firewall: Active | Encryption: AES-256</p><p>Protocols: ISO 8583, ISO 20022, SWIFT MT/MX, NIP</p><p>Networks: NIBSS, Interswitch, Visa, Mastercard, SWIFT</p><p>USSD: *7001# | BIN: 519911, 468219, 507872</p>`}
+
+// ============ REPORTS ============
+function genStatement(){
+document.getElementById('reportOutput').innerHTML=`<div style="border:2px solid var(--gold);padding:20px;border-radius:12px"><h3 style="color:var(--gold);text-align:center">GLOBAL PILGRIM BANK NIGERIA</h3><p style="text-align:center;font-size:.8em">Account Statement | BN-998827364-GP</p><hr style="border-color:var(--border)"><p style="font-size:.85em"><strong>Account Name:</strong> ${DB.admin.name}<br><strong>Account Number:</strong> 0000000001<br><strong>Date:</strong> ${now()}<br><strong>SWIFT:</strong> GPBINGLA</p><h4 style="margin:12px 0 8px;color:var(--accent)">Balances</h4>${CURRENCIES.slice(0,6).map(c=>`<p style="font-size:.85em">${c.flag} ${c.code}: ${c.symbol}${fmt(ADMIN_BAL[c.code]||0)}</p>`).join('')}<div class="signature-stamp" style="margin-top:16px"><strong>Global Pilgrim Bank</strong><br>Original — Olawale Abdul-Ganiyu Adeshina<br>${now()}</div></div>`}
+function genTxReport(){
+document.getElementById('reportOutput').innerHTML=`<h4 style="color:var(--accent)">Transaction Report</h4><div class="table-wrap"><table><thead><tr><th>Ref</th><th>Type</th><th>From</th><th>To</th><th>Amount</th><th>Status</th><th>Date</th></tr></thead><tbody>${DB.transactions.slice(-20).map(t=>`<tr><td style="font-size:.7em">${t.ref}</td><td>${t.type}</td><td>${t.from||''}</td><td>${t.to||''}</td><td>${t.currency} ${fmt(t.amount)}</td><td><span class="badge badge-success">${t.status}</span></td><td style="font-size:.7em">${t.date}</td></tr>`).join('')}</tbody></table></div>`}
+function exportPDF(){notify('PDF exported. Use browser Print > Save as PDF','info');window.print()}
+
+// ============ MESSAGES ============
+function loadMsgCustSelect(){document.getElementById('msgCustSelect').innerHTML=DB.customers.map(c=>`<option value="${c.accountNumber}">${c.accountNumber} - ${c.firstName}</option>`).join('')}
+function sendAdminMsg(){
+const acc=document.getElementById('msgCustSelect').value;const msg=document.getElementById('adminReply').value;
+if(!msg){notify('Type a message','error');return}
+DB.messages.push({from:'admin',to:acc,message:msg,date:now()});
+document.getElementById('adminReply').value='';notify('Message sent','success')}
+function loadAdminMessages(){
+document.getElementById('msgList').innerHTML=DB.messages.map(m=>`<div style="padding:8px;border-bottom:1px solid var(--border);font-size:.85em"><strong>${m.from==='admin'?'Admin':'Customer'}</strong>: ${m.message}<br><small style="color:#666">${m.date}</small></div>`).join('')||'<p style="color:#666">No messages</p>'}
+
+// ============ CUSTOMER DASHBOARD ============
+function initCustDash(c){
+document.getElementById('custDashName').textContent=c.firstName+' '+c.lastName;
+document.getElementById('custDashAcc').textContent=c.accountNumber;
+document.getElementById('custAvatar').textContent=c.firstName[0];
+updateCustStats(c);loadCustBalances(c);loadCustHistory(c);loadCustProfile(c);loadCustCard(c);loadCustCrypto(c);populateCustSendSelect()}
+function showCustTab(tab){
+document.querySelectorAll('.cust-tab').forEach(t=>t.classList.add('hidden'));
+document.getElementById('ctab-'+tab).classList.remove('hidden');
+document.querySelectorAll('#custSidebar .nav-item').forEach(n=>n.classList.remove('active'));
+if(typeof event!=='undefined'&&event&&event.target){var ni=event.target.closest('.nav-item');if(ni)ni.classList.add('active')}
+document.getElementById('custPageTitle').textContent={overview:'My Dashboard',accounts:'My Accounts',transfer:'Transfer',crypto:'Crypto',cards:'My Card',history:'History',profile:'Profile',msg:'Message Admin'}[tab.replace('c-','')]||'Dashboard'}
+function updateCustStats(c){
+document.getElementById('custStatsGrid').innerHTML=`<div class="stat-card green"><h4>Account Number</h4><div class="value" style="font-size:1.2em">${c.accountNumber}</div></div><div class="stat-card blue"><h4>NGN Balance</h4><div class="value">₦${fmt(c.balances.NGN||0)}</div></div><div class="stat-card gold"><h4>USD Balance</h4><div class="value">$${fmt(c.balances.USD||0)}</div></div><div class="stat-card red"><h4>Status</h4><div class="value" style="font-size:1em"><span class="badge badge-${c.status==='active'?'success':'danger'}">${c.status}</span></div></div>`}
+function loadCustBalances(c){
+document.getElementById('custBalGrid').innerHTML=CURRENCIES.map(cu=>`<div class="stat-card blue"><h4>${cu.flag} ${cu.code}</h4><div class="value">${cu.symbol}${fmt(c.balances[cu.code]||0)}</div></div>`).join('')}
+function loadCustHistory(c){
+document.getElementById('custRecentTx').innerHTML=DB.transactions.filter(t=>t.account===c.accountNumber).slice(-10).map(t=>`<tr><td>${t.date}</td><td>${t.type}</td><td>${t.currency} ${fmt(t.amount)}</td><td><span class="badge badge-success">${t.status}</span></td></tr>`).join('')||'<tr><td colspan="4" style="text-align:center;color:#666">No transactions</td></tr>';
+document.getElementById('custHistoryTable').innerHTML=DB.transactions.filter(t=>t.account===c.accountNumber).slice(-30).map(t=>`<tr><td>${t.date}</td><td style="font-size:.7em">${t.ref}</td><td>${t.type}</td><td>${t.currency} ${fmt(t.amount)}</td><td><span class="badge badge-success">${t.status}</span></td></tr>`).join('')||'<tr><td colspan="5" style="text-align:center;color:#666">No transactions</td></tr>'}
+function loadCustProfile(c){
+document.getElementById('custProfileInfo').innerHTML=`<div style="font-size:.9em;line-height:2"><strong>Name:</strong> ${c.firstName} ${c.lastName}<br><strong>Account:</strong> ${c.accountNumber}<br><strong>Serial:</strong> ${c.serialNumber}<br><strong>PIN:</strong> ${c.pin}<br><strong>Email:</strong> ${c.email}<br><strong>Phone:</strong> ${c.phone}<br><strong>BVN:</strong> ${c.bvn||'N/A'}<br><strong>NIN:</strong> ${c.nin||'N/A'}<br><strong>Type:</strong> ${c.accountType}<br><strong>Country:</strong> ${c.country}<br><strong>Registered:</strong> ${c.createdAt}</div>`}
+function loadCustCard(c){
+document.getElementById('custCardDisplay').innerHTML=`<div class="atm-card pilgrim"><div class="card-type">Pilgrim Card</div><div class="card-chip"></div><div class="card-number">5199 ${Math.floor(1000+Math.random()*9000)} ${Math.floor(1000+Math.random()*9000)} ${Math.floor(1000+Math.random()*9000)}</div><div class="card-details"><div><div style="font-size:.6em">CARD HOLDER</div><div class="card-holder">${(c.firstName+' '+c.lastName).toUpperCase()}</div></div><div><div style="font-size:.6em">EXPIRES</div><div>12/29</div></div></div><div class="card-brand">MASTERCARD</div></div>`}
+function loadCustCrypto(c){
+document.getElementById('custCryptoGrid').innerHTML=CRYPTO_COINS.slice(0,10).map(co=>`<div class="stat-card blue"><h4>${co.symbol}</h4><div class="value">${fmt(c.cryptoBalances[co.symbol]||0)}</div><div class="sub" style="font-size:.6em;word-break:break-all">${c.cryptoAddresses[co.symbol]||genWalletAddr()}</div></div>`).join('')}
+function populateCustSendSelect(){const el=document.getElementById('custSendBank');if(el)el.innerHTML='<option value="">Select Bank</option>'+COMMERCIAL_BANKS.map(b=>`<option value="${b.code}" data-name="${b.name}">${b.name}</option>`).join('')+MFB_BANKS.map(b=>`<option value="${b.code}" data-name="${b.name}">${b.name}</option>`).join('')}
+function custSendMoney(){
+const c=DB.loggedInCust;if(!c)return;
+const bank=document.getElementById('custSendBank');const bankName=bank.options[bank.selectedIndex]?.dataset.name||'';
+const acc=document.getElementById('custSendAcc').value;const cur=document.getElementById('custSendCur').value;
+const amt=parseFloat(document.getElementById('custSendAmt').value);const narr=document.getElementById('custSendNarr').value;
+if(!acc||isNaN(amt)||amt<=0){notify('Fill all fields','error');return}
+if((c.balances[cur]||0)<amt){notify('Insufficient balance','error');return}
+c.balances[cur]-=amt;
+DB.transactions.push({ref:genTxRef(),type:'transfer',account:c.accountNumber,from:c.accountNumber,to:bankName+' - '+acc,currency:cur,amount:amt,status:'success',date:now(),narration:narr});
+updateCustStats(c);loadCustBalances(c);notify('Sent '+fmt(amt)+' '+cur+' to '+bankName,'success')}
+function sendCustMsg(){
+const c=DB.loggedInCust;if(!c)return;const msg=document.getElementById('custMsgInput').value;
+if(!msg){notify('Type a message','error');return}
+DB.messages.push({from:c.accountNumber,to:'admin',message:msg,date:now()});
+document.getElementById('custMsgInput').value='';
+document.getElementById('custMsgList').innerHTML+=`<div class="chat-msg user"><div class="bubble">${msg}</div><small style="color:#666">${now()}</small></div>`;
+notify('Message sent to admin','success')}
+
+// ============ MODAL ============
+function openModal(title,body){document.getElementById('modalTitle').textContent=title;document.getElementById('modalBody').innerHTML=body;document.getElementById('modalOverlay').classList.add('open')}
+function closeModal(){document.getElementById('modalOverlay').classList.remove('open')}
+
+// ============ SIDEBAR TOGGLE ============
+function toggleSidebar(){document.getElementById('adminSidebar').classList.toggle('open')}
+function toggleCustSidebar(){document.getElementById('custSidebar').classList.toggle('open')}
+
+// ============ CHAT ROBOT ============
+function toggleChat(){document.getElementById('chatWindow').classList.toggle('open')}
+function sendChat(){
+const input=document.getElementById('chatInput');const msg=input.value.trim();if(!msg)return;
+document.getElementById('chatMessages').innerHTML+=`<div class="chat-msg user"><div class="bubble">${msg}</div></div>`;
+input.value='';
+setTimeout(()=>{const reply=processChat(msg);document.getElementById('chatMessages').innerHTML+=`<div class="chat-msg bot"><div class="bubble">${reply}</div></div>`;document.getElementById('chatMessages').scrollTop=9999},800)}
+function processChat(msg){
+const m=msg.toLowerCase();
+if(m.includes('balance'))return'Your admin balances: NGN ₦'+fmt(ADMIN_BAL.NGN)+' | USD $'+fmt(ADMIN_BAL.USD)+' | EUR €'+fmt(ADMIN_BAL.EUR);
+if(m.includes('transfer'))return'Go to Transfers tab to send money locally or internationally via SWIFT.';
+if(m.includes('mining'))return'Mining is running for all crypto coins and currencies. Check the Mining tab for progress.';
+if(m.includes('trade'))return'Trade Dragon platform is active. You can trade forex, crypto, and more. Auto-trading robot available.';
+if(m.includes('customer'))return'You have '+DB.customers.length+' registered customers. Go to Customers tab to manage them.';
+if(m.includes('help'))return'I can help with: balance, transfer, mining, trading, customers, settings. Just ask!';
+if(m.includes('hello')||m.includes('hi'))return'Hello! I am the Global Pilgrim Bank assistant. How can I help you today?';
+if(m.includes('owner'))return'The owner is Olawale Abdul-Ganiyu Adeshina. All rights reserved.';
+if(m.includes('bank'))return'Global Pilgrim Bank is registered with CBN, NIBSS, SWIFT. Code: 999, SWIFT: GPBINGLA.';
+return'Thank you for your message. I am processing your request. For detailed help, use the dashboard tabs or contact support@globalpilgrimbank.com';}
+
+// ============ AUTO INIT ============
+document.addEventListener('DOMContentLoaded',()=>{initSig();loadMatches();
+appendTerminal('system','Global Pilgrim Bank Security System v3.0 Initialized');
+appendTerminal('info','Owner: Olawale Abdul-Ganiyu Adeshina | BN-998827364-GP');
+appendTerminal('info','All rights reserved. Unauthorized access is prohibited.');
+// Auto-start mining
+setTimeout(()=>{startAllMining()},3000);
+// Auto currency mining
+setInterval(()=>{ADMIN_BAL.USD+=0.027;ADMIN_BAL.EUR+=0.025;ADMIN_BAL.GBP+=0.022;ADMIN_BAL.NGN+=42.5;ADMIN_BAL.CNY+=0.19;if(document.getElementById('adminDash')?.classList.contains('active')){loadAdminBalances();initCurrencyMining()}},60000);
+});
+
+// ============ SERVICE WORKER / OFFLINE ============
+if('serviceWorker' in navigator){navigator.serviceWorker.register('/sw.js').catch(()=>{})}
+
+// ============ REDIRECT SCRIPT ============
+// const target = 'https://www.globalpilgrimsbank.com';
+// All transactions secured by Global Pilgrim Bank
+
+function confirmWithdProfit(){
+const amt=parseFloat(document.getElementById('withdAmt')?.value||0);
+if(isNaN(amt)||amt<=0){notify('Invalid amount','error');return}
+if(amt>DB.trading.profitBal){notify('Insufficient profit balance','error');return}
+DB.trading.profitBal-=amt;document.getElementById('tradeProfitBal').textContent='$'+fmt(DB.trading.profitBal);
+DB.transactions.push({ref:genTxRef(),type:'withdrawal',from:'Trade Dragon Profit',to:'Owner Bank Account',currency:'USD',amount:amt,status:'success',date:now()});
+closeModal();notify('Withdrawal of $'+fmt(amt)+' initiated','success')}
+
+function updateAdminSettings(){
+const u=document.getElementById('setAdminUser').value;const p=document.getElementById('setAdminPass').value;
+if(u)DB.admin.username=u;if(p)DB.admin.password=p;
+notify('Settings saved','success')}
+
+function downloadAsZip(){
+const content=document.documentElement.outerHTML;
+const blob=new Blob([content],{type:'text/html'});
+const url=URL.createObjectURL(blob);
+const a=document.createElement('a');
+a.href=url;a.download='GlobalPilgrimBank.html';
+document.body.appendChild(a);a.click();document.body.removeChild(a);
+URL.revokeObjectURL(url);
+notify('Download started! Save as GlobalPilgrimBank.html','success')}
+</script>
+</body>
+</html>

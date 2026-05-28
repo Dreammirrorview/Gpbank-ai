@@ -1,0 +1,13 @@
+function showAdminTab(tab){
+document.querySelectorAll('.admin-tab').forEach(t=>t.classList.add('hidden'));
+document.getElementById('tab-'+tab).classList.remove('hidden');
+document.querySelectorAll('.sidebar-nav .nav-item').forEach(n=>n.classList.remove('active'));
+event.target.closest('.nav-item')?.classList.add('active');
+document.getElementById('adminPageTitle').textContent={overview:'Dashboard Overview',customers:'Customer Management',accounts:'Accounts & Balance',transfers:'Transfers',payments:'Banks & Payments',crypto:'Crypto Wallet',mining:'Mining Engine',trading:'Trade Dragon',invest:'Investment & Shares',cards:'Virtual Cards',salary:'Salary/Payroll',betting:'Sports Betting',terminal:'Security Terminal',reports:'Reports',settings:'Settings',messages:'Customer Messages'}[tab]||'Dashboard';
+}
+function updateAdminStats(){
+const g=document.getElementById('adminStatsGrid');
+g.innerHTML=`<div class="stat-card green"><h4>Total Customers</h4><div class="value">${DB.customers.length}</div></div><div class="stat-card blue"><h4>NGN Balance</h4><div class="value">₦${fmt(ADMIN_BAL.NGN)}</div></div><div class="stat-card gold"><h4>USD Balance</h4><div class="value">$${fmt(ADMIN_BAL.USD)}</div></div><div class="stat-card red"><h4>Transactions</h4><div class="value">${DB.transactions.length}</div></div>`;
+}
+function loadCustTable(){
+const tb=document.getElementById('custTableBody');tb.innerHTML='';

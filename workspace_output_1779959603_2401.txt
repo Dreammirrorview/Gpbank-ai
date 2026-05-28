@@ -1,0 +1,91 @@
+function creditCustomer(){
+const sel=document.getElementById('balCustSelect').value;if(sel==='')return;const c=DB.customers[sel];
+const cur=document.getElementById('balCurrency').value;const amt=parseFloat(document.getElementById('balAmount').value);
+if(isNaN(amt)||amt<=0){notify('Invalid amount','error');return}
+c.balances[cur]=(c.balances[cur]||0)+amt;
+DB.transactions.push({ref:genTxRef(),type:'credit',account:c.accountNumber,name:c.firstName+' '+c.lastName,currency:cur,amount:amt,status:'success',date:now(),narration:'Admin credit'});
+updateCustBalDisplay();notify('Credited '+fmt(amt)+' '+cur,'success')}
+function debitCustomer(){
+const sel=document.getElementById('balCustSelect').value;if(sel==='')return;const c=DB.customers[sel];
+const cur=document.getElementById('balCurrency').value;const amt=parseFloat(document.getElementById('balAmount').value);
+if(isNaN(amt)||amt<=0){notify('Invalid amount','error');return}
+if((c.balances[cur]||0)<amt){notify('Insufficient balance','error');return}
+c.balances[cur]-=amt;
+DB.transactions.push({ref:genTxRef(),type:'debit',account:c.accountNumber,name:c.firstName+' '+c.lastName,currency:cur,amount:amt,status:'success',date:now(),narration:'Admin debit'});
+updateCustBalDisplay();notify('Debited '+fmt(amt)+' '+cur,'success')}
+function loadAdminBalances(){
+const g=document.getElementById('adminBalanceGrid');g.innerHTML=CURRENCIES.map(c=>`<div class="stat-card blue"><h4>${c.flag} ${c.code}</h4><div class="value">${c.symbol}${fmt(ADMIN_BAL[c.code]||0)}</div></div>`).join('')}
+function loadVaultTable(){
+const tb=document.getElementById('vaultTable');tb.innerHTML=OWNER_BANKS.map(b=>`<tr><td>${b.bank}</td><td>${b.acc}</td><td>${b.name}</td><td><button class="btn btn-sm btn-primary" onclick="sendToVault('${b.bank}','${b.acc}','${b.name}')">Send</button></td></tr>`).join('')}
+function sendToVault(bank,acc,name){openModal('Send to '+bank,`<p>Account: ${acc}<br>Name: ${name}</p><div class="form-group"><label>Amount (NGN)</label><input id="vaultAmt" type="number"></div><button class="btn btn-primary" onclick="confirmVaultSend('${bank}','${acc}','${name}')">Confirm Send</button>`)}
+function confirmVaultSend(bank,acc,name){const amt=parseFloat(document.getElementById('vaultAmt').value);if(isNaN(amt)||amt<=0){notify('Invalid amount','error');return}ADMIN_BAL.NGN-=amt;DB.transactions.push({ref:genTxRef(),type:'transfer',from:'Global Pilgrim Bank',to:bank+' - '+acc+' - '+name,currency:'NGN',amount:amt,status:'success',date:now()});updateAdminStats();loadAdminBalances();closeModal();notify('Sent ₦'+fmt(amt)+' to '+name+' at '+bank,'success')}
+
+// ============ BANKS & PAYMENTS ============
+function loadBanksTables(){
+document.getElementById('commBankTable').innerHTML=COMMERCIAL_BANKS.map(b=>`<tr><td>${b.name}</td><td>${b.code}</td><td>${b.swift||'N/A'}</td><td>Commercial</td></tr>`).join('');
+document.getElementById('mfbBankTable').innerHTML=MFB_BANKS.map(b=>`<tr><td>${b.name}</td><td>${b.code}</td><td>Microfinance</td></tr>`).join('')}
+function populateBankSelects(){
+const opts=COMMERCIAL_BANKS.map(b=>`<option value="${b.code}" data-name="${b.name}">${b.name} (${b.code})</option>`).join('');
+const mfbOpts=MFB_BANKS.map(b=>`<option value="${b.code}" data-name="${b.name}">${b.name} (${b.code})</option>`).join('');
+['receiverBankSelect','custSendBank'].forEach(id=>{const el=document.getElementById(id);if(el)el.innerHTML='<option value="">Select Bank</option>'+opts+mfbOpts});
+document.getElementById('mfbPaySelect').innerHTML='<option value="">Select MFB</option>'+mfbOpts;
+document.getElementById('senderAccSelect').innerHTML='<option value="GPB">Global Pilgrim Bank (Admin)</option>'+DB.customers.map((c,i)=>`<option value="${c.accountNumber}">${c.accountNumber} - ${c.firstName} ${c.lastName}</option>`).join('')}
+function resolveBankName(){
+const sel=document.getElementById('receiverBankSelect');const opt=sel.options[sel.selectedIndex];
+const accNum=document.getElementById('receiverAccNum').value;
+if(opt&&opt.dataset.name&&accNum.length>=10){document.getElementById('receiverName').value='[Resolved] Account Holder - '+opt.dataset.name;notify('Account resolved','success')}else{document.getElementById('receiverName').value=''}}
+function sendTransfer(){
+const bank=document.getElementById('receiverBankSelect');const bankName=bank.options[bank.selectedIndex]?.dataset.name||'';
+const accNum=document.getElementById('receiverAccNum').value;const amt=parseFloat(document.getElementById('transferAmount').value);
+const cur=document.getElementById('transferCurrency').value;const narr=document.getElementById('transferNarration').value;
+if(!accNum||isNaN(amt)||amt<=0){notify('Fill all fields','error');return}
+if((ADMIN_BAL[cur]||0)<amt){notify('Insufficient admin balance','error');return}
+ADMIN_BAL[cur]-=amt;
+DB.transactions.push({ref:genTxRef(),type:'transfer',from:'Global Pilgrim Bank',to:bankName+' - '+accNum,currency:cur,amount:amt,status:'success',date:now(),narration:narr});
+updateAdminStats();loadAdminBalances();notify('Transfer of '+fmt(amt)+' '+cur+' to '+bankName+' successful!','success')}
+function sendIntlTransfer(){
+const swift=document.getElementById('swiftCode').value;const iban=document.getElementById('ibanInput').value;
+const name=document.getElementById('intlBenefName').value;const cur=document.getElementById('intlCurrency').value;
+const amt=parseFloat(document.getElementById('intlAmount').value);
+if(!swift||!name||isNaN(amt)||amt<=0){notify('Fill all fields','error');return}
+if((ADMIN_BAL[cur]||0)<amt){notify('Insufficient balance','error');return}
+ADMIN_BAL[cur]-=amt;
+DB.transactions.push({ref:genTxRef(),type:'intl_transfer',from:'Global Pilgrim Bank (SWIFT:'+swift+')',to:name+' - IBAN:'+iban,currency:cur,amount:amt,status:'success',date:now()});
+updateAdminStats();loadAdminBalances();notify('International transfer of '+fmt(amt)+' '+cur+' sent via SWIFT','success')}
+function sendMfbPayment(){
+const sel=document.getElementById('mfbPaySelect');const bankName=sel.options[sel.selectedIndex]?.dataset.name||'';
+const acc=document.getElementById('mfbPayAccNum').value;const name=document.getElementById('mfbPayName').value;
+const amt=parseFloat(document.getElementById('mfbPayAmount').value);
+if(!acc||isNaN(amt)||amt<=0){notify('Fill all fields','error');return}
+ADMIN_BAL.NGN-=amt;
+DB.transactions.push({ref:genTxRef(),type:'mfb_payment',from:'Global Pilgrim Bank',to:bankName+' - '+acc+' - '+name,currency:'NGN',amount:amt,status:'success',date:now()});
+updateAdminStats();loadAdminBalances();notify('Payment of ₦'+fmt(amt)+' to '+bankName+' sent','success')}
+
+// ============ CRYPTO ============
+function generateAllWallets(){
+CRYPTO_COINS.forEach(c=>{if(!DB.mining[c.symbol])DB.mining[c.symbol]={balance:0,progress:0,mining:false,addr:c.addr}});
+loadCryptoUI();notify('Wallets generated','success')}
+function loadCryptoUI(){
+const g=document.getElementById('cryptoBalanceGrid');
+g.innerHTML=CRYPTO_COINS.map(c=>{const bal=DB.mining[c.symbol]?.balance||0;return`<div class="stat-card blue"><h4>${c.symbol}</h4><div class="value">${fmt(bal,8)}</div><div class="sub" style="font-size:.65em;word-break:break-all">${c.addr}</div></div>`}).join('');
+['cryptoSendCoin','cryptoRecvCoin','swapFrom','swapTo'].forEach(id=>{const el=document.getElementById(id);if(el)el.innerHTML=CRYPTO_COINS.map(c=>`<option value="${c.symbol}">${c.symbol} - ${c.name}</option>`).join('')});
+document.getElementById('cryptoFromAddr').value=CRYPTO_COINS[0].addr}
+function showRecvAddr(){const coin=document.getElementById('cryptoRecvCoin').value;const c=CRYPTO_COINS.find(x=>x.symbol===coin);document.getElementById('cryptoRecvAddr').value=c?c.addr:''}
+function copyRecvAddr(){const inp=document.getElementById('cryptoRecvAddr');navigator.clipboard?.writeText(inp.value);notify('Address copied','success')}
+function sendCrypto(){
+const coin=document.getElementById('cryptoSendCoin').value;const amt=parseFloat(document.getElementById('cryptoSendAmount').value);const addr=document.getElementById('cryptoSendAddr').value;
+if(isNaN(amt)||amt<=0||!addr){notify('Fill all fields','error');return}
+if((DB.mining[coin]?.balance||0)<amt){notify('Insufficient '+coin+' balance','error');return}
+DB.mining[coin].balance-=amt;
+DB.transactions.push({ref:genTxRef(),type:'crypto_send',from:DB.mining[coin]?.addr,to:addr,currency:coin,amount:amt,status:'success',date:now()});
+loadCryptoUI();notify('Sent '+amt+' '+coin+' to '+addr,'success')}
+function swapCrypto(){
+const from=document.getElementById('swapFrom').value;const to=document.getElementById('swapTo').value;const amt=parseFloat(document.getElementById('swapAmount').value);
+if(isNaN(amt)||amt<=0){notify('Invalid amount','error');return}
+if((DB.mining[from]?.balance||0)<amt){notify('Insufficient '+from,'error');return}
+DB.mining[from].balance-=amt;const rate=1;DB.mining[to].balance=(DB.mining[to].balance||0)+amt*rate;
+loadCryptoUI();notify('Swapped '+amt+' '+from+' to '+to,'success')}
+
+// ============ MINING ============
+function initMining(){
+CRYPTO_COINS.forEach(c=>{if(!DB.mining[c.symbol])DB.mining[c.symbol]={balance:0,progress:0,mining:false,addr:c.addr}});

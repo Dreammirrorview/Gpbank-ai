@@ -1,0 +1,60 @@
+659:function genAccNo(){return String(Math.floor(1000000000+Math.random()*9000000000))}
+660:function genSerial(){return 'GPB-'+Date.now().toString(36).toUpperCase()+Math.random().toString(36).substr(2,4).toUpperCase()}
+661:function genPin(){return String(Math.floor(1000+Math.random()*9000))}
+662:function genWalletAddr(){return '0x'+Array.from({length:40},()=>Math.floor(Math.random()*16).toString(16)).join('')}
+663:function genTxRef(){return 'TXN-'+Date.now()+'-'+Math.random().toString(36).substr(2,6).toUpperCase()}
+664:function fmt(n,c=''){return Number(n).toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:2})}
+665:function now(){return new Date().toLocaleString()}
+666:function notify(msg,type='info'){const n=document.createElement('div');n.className='notification '+type;n.textContent=msg;document.body.appendChild(n);setTimeout(()=>n.remove(),4000)}
+667:function showPage(id){document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));document.getElementById(id).classList.add('active')}
+670:function adminLogin(){
+676:function custLogin(){
+683:function logout(){DB.loggedInUser=null;DB.loggedInCust=null;DB.miningIntervals.forEach(clearInterval);DB.miningIntervals=[];clearInterval(DB.tradeInterval);clearInterval(DB.priceInterval);showPage('coverPage');notify('Logged out','info')}
+687:function initSig(){const c=document.getElementById('sigCanvas');if(!c)return;sigCtx=c.getContext('2d');c.addEventListener('mousedown',e=>{sigDrawing=true;sigCtx.moveTo(e.offsetX,e.offsetY)});c.addEventListener('mousemove',e=>{if(!sigDrawing)return;sigCtx.lineTo(e.offsetX,e.offsetY);sigCtx.stroke()});c.addEventListener('mouseup',()=>sigDrawing=false);c.addEventListener('mouseleave',()=>sigDrawing=false)}
+688:function clearSig(){const c=document.getElementById('sigCanvas');sigCtx=c.getContext('2d');sigCtx.clearRect(0,0,c.width,c.height)}
+691:function registerCustomer(){
+704:function initAdminDash(){
+708:function showAdminTab(tab){
+715:function updateAdminStats(){
+719:function loadCustTable(){
+726:function editCust(i){const c=DB.customers[i];openModal('Edit Customer: '+c.accountNumber,`
+733:function saveCustEdit(i){const c=DB.customers[i];c.firstName=document.getElementById('editFirst').value;c.lastName=document.getElementById('editLast').value;c.email=document.getElementById('editEmail').value;c.phone=document.getElementById('editPhone').value;c.pin=document.getElementById('editPin').value;loadCustTable();closeModal();notify('Customer updated','success')}
+734:function toggleCustStatus(i){DB.customers[i].status=DB.customers[i].status==='active'?'disabled':'active';loadCustTable();notify('Status updated','success')}
+735:function deleteCust(i){const pw=prompt('Enter password to delete:');if(pw==='1234567890'){DB.customers.splice(i,1);loadCustTable();notify('Customer deleted','success')}else{notify('Wrong password','error')}}
+736:function openNewCustomerModal(){
+744:function createNewCust(){
+750:function loadCustBalance(){
+757:function updateCustBalDisplay(){
+760:function creditCustomer(){
+767:function debitCustomer(){
+775:function loadAdminBalances(){
+777:function loadVaultTable(){
+779:function sendToVault(bank,acc,name){openModal('Send to '+bank,`<p>Account: ${acc}<br>Name: ${name}</p><div class="form-group"><label>Amount (NGN)</label><input id="vaultAmt" type="number"></div><button class="btn btn-primary" onclick="confirmVaultSend('${bank}','${acc}','${name}')">Confirm Send</button>`)}
+780:function confirmVaultSend(bank,acc,name){const amt=parseFloat(document.getElementById('vaultAmt').value);if(isNaN(amt)||amt<=0){notify('Invalid amount','error');return}ADMIN_BAL.NGN-=amt;DB.transactions.push({ref:genTxRef(),type:'transfer',from:'Global Pilgrim Bank',to:bank+' - '+acc+' - '+name,currency:'NGN',amount:amt,status:'success',date:now()});updateAdminStats();loadAdminBalances();closeModal();notify('Sent ₦'+fmt(amt)+' to '+name+' at '+bank,'success')}
+783:function loadBanksTables(){
+786:function populateBankSelects(){
+792:function resolveBankName(){
+796:function sendTransfer(){
+805:function sendIntlTransfer(){
+814:function sendMfbPayment(){
+824:function generateAllWallets(){
+827:function loadCryptoUI(){
+832:function showRecvAddr(){const coin=document.getElementById('cryptoRecvCoin').value;const c=CRYPTO_COINS.find(x=>x.symbol===coin);document.getElementById('cryptoRecvAddr').value=c?c.addr:''}
+833:function copyRecvAddr(){const inp=document.getElementById('cryptoRecvAddr');navigator.clipboard?.writeText(inp.value);notify('Address copied','success')}
+834:function sendCrypto(){
+841:function swapCrypto(){
+849:function initMining(){
+852:function loadMiningCards(){
+854:function startAllMining(){
+861:function stopAllMining(){DB.miningIntervals.forEach(clearInterval);DB.miningIntervals=[];CRYPTO_COINS.forEach(c=>DB.mining[c.symbol].mining=false);loadMiningCards();notify('Mining stopped','info')}
+862:function initCurrencyMining(){
+867:function initTrading(){
+872:function changeTradePair(){const pair=document.getElementById('tradePairSelect').value;document.getElementById('tradePairDisplay').textContent=pair;updateTradeDisplay()}
+873:function updateTradeDisplay(){
+881:function startPriceUpdates(){
+887:function renderCandles(){
+892:function toggleAutoTrade(){
+897:function autoTradeLogic(){
+904:function placeTrade(type){
+909:function updatePositionsDisplay(){
+912:function closePosition(id){const idx=DB.trading.positions.findIndex(p=>p.id===id);if(idx>=0){const p=DB.trading.positions[idx];const profit=(Math.random()*50-15);DB.trading.profitBal+=profit;DB.trading.positions.splice(idx,1);document.getElementById('tradeProfitBal').textContent='$'+fmt(DB.trading.profitBal);updatePositionsDisplay();notify('Position closed. Profit: $'+fmt(profit),'success')}}

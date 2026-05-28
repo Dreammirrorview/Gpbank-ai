@@ -1,0 +1,9 @@
+551:<div class="nav-item active" onclick="showCustTab('c-overview')"><span class="icon">📊</span> My Dashboard</div>
+552:<div class="nav-item" onclick="showCustTab('c-accounts')"><span class="icon">💰</span> My Accounts</div>
+553:<div class="nav-item" onclick="showCustTab('c-transfer')"><span class="icon">🔄</span> Transfer</div>
+554:<div class="nav-item" onclick="showCustTab('c-crypto')"><span class="icon">₿</span> Crypto</div>
+555:<div class="nav-item" onclick="showCustTab('c-cards')"><span class="icon">💳</span> My Card</div>
+556:<div class="nav-item" onclick="showCustTab('c-history')"><span class="icon">📋</span> History</div>
+557:<div class="nav-item" onclick="showCustTab('c-profile')"><span class="icon">👤</span> Profile</div>
+558:<div class="nav-item" onclick="showCustTab('c-msg')"><span class="icon">💬</span> Message Admin</div>
+975:function showCustTab(tab){

@@ -1,0 +1,2 @@
+33:.cover-footer{position:absolute;bottom:20px;text-align:center;font-size:.75em;color:#666;z-index:1}
+212:<div class="cover-footer">

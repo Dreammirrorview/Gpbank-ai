@@ -1,0 +1,51 @@
+const CURRENCIES = [
+{code:'NGN',name:'Naira',symbol:'₦',flag:'🇳🇬'},{code:'USD',name:'Dollar',symbol:'$',flag:'🇺🇸'},{code:'EUR',name:'Euro',symbol:'€',flag:'🇪🇺'},{code:'GBP',name:'Pound',symbol:'£',flag:'🇬🇧'},{code:'CNY',name:'Yuan',symbol:'¥',flag:'🇨🇳'},{code:'JPY',name:'Yen',symbol:'¥',flag:'🇯🇵'},{code:'RUB',name:'Ruble',symbol:'₽',flag:'🇷🇺'},{code:'UAH',name:'Hryvnia',symbol:'₴',flag:'🇺🇦'},{code:'GHS',name:'Cedi',symbol:'₵',flag:'🇬🇭'},{code:'ZAR',name:'Rand',symbol:'R',flag:'🇿🇦'},{code:'BRL',name:'Real',symbol:'R$',flag:'🇧🇷'},{code:'ARS',name:'Peso',symbol:'$',flag:'🇦🇷'},{code:'CAD',name:'Dollar C',symbol:'C$',flag:'🇨🇦'},{code:'AUD',name:'Dollar A',symbol:'A$',flag:'🇦🇺'},{code:'XAF',name:'CFA',symbol:'FCFA',flag:'🇨🇲'},{code:'HKD',name:'HK Dollar',symbol:'HK$',flag:'🇭🇰'},{code:'INR',name:'Rupee',symbol:'₹',flag:'🇮🇳'},{code:'KRW',name:'Won',symbol:'₩',flag:'🇰🇷'},{code:'CHF',name:'Franc',symbol:'CHF',flag:'🇨🇭'},{code:'SEK',name:'Krona',symbol:'kr',flag:'🇸🇪'}
+];
+const OWNER_BANKS = [
+{bank:'United Bank for Africa',acc:'2104027565',name:'Olawale Abdul-Ganiyu Adeshina'},{bank:'Fidelity Bank',acc:'6016830595',name:'Olawale Abdul-Ganiyu Adeshina'},{bank:'First City Monument Bank',acc:'3022098010',name:'Olawale Abdul-Ganiyu Adeshina'},{bank:'Guarantee Trust Bank',acc:'0168025324',name:'Olawale Abdul-Ganiyu Adeshina'},{bank:'Zenith Bank',acc:'2373187414',name:'Olawale Abdul-Ganiyu Adeshina'},{bank:'Wema Bank',acc:'0292172838',name:'Olawale Abdul-Ganiyu Adeshina'},{bank:'Nova Bank',acc:'1707037557',name:'Olawale Abdul-Ganiyu Adeshina'},{bank:'Parallex Bank',acc:'2001991254',name:'Olawale Abdul-Ganiyu Adeshina'},{bank:'Opay',acc:'8091981349',name:'Olawale Abdul-Ganiyu Adeshina'},{bank:'PalmPay',acc:'9030277275',name:'Olawale Abdul-Ganiyu Adeshina'},{bank:'Moniepoint',acc:'9030277275',name:'Olawale Abdul-Ganiyu Adeshina'}
+];
+const ADMIN_BAL = {NGN:50000000,USD:250000,EUR:200000,GBP:170000,CNY:1800000,JPY:28000000,RUB:20000000,UAH:8000000,GHS:3000000,ZAR:4500000,BRL:1500000,ARS:250000000,CAD:340000,AUD:380000,XAF:150000000,HKD:2000000,INR:20000000,KRW:300000000,CHF:220000,SEK:3200000};
+
+// ============ UTILITY FUNCTIONS ============
+function genAccNo(){return String(Math.floor(1000000000+Math.random()*9000000000))}
+function genSerial(){return 'GPB-'+Date.now().toString(36).toUpperCase()+Math.random().toString(36).substr(2,4).toUpperCase()}
+function genPin(){return String(Math.floor(1000+Math.random()*9000))}
+function genWalletAddr(){return '0x'+Array.from({length:40},()=>Math.floor(Math.random()*16).toString(16)).join('')}
+function genTxRef(){return 'TXN-'+Date.now()+'-'+Math.random().toString(36).substr(2,6).toUpperCase()}
+function fmt(n,c=''){return Number(n).toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:2})}
+function now(){return new Date().toLocaleString()}
+function notify(msg,type='info'){const n=document.createElement('div');n.className='notification '+type;n.textContent=msg;document.body.appendChild(n);setTimeout(()=>n.remove(),4000)}
+function showPage(id){document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));document.getElementById(id).classList.add('active')}
+
+// ============ LOGIN ============
+function adminLogin(){
+const u=document.getElementById('adminUser').value;
+const p=document.getElementById('adminPass').value;
+if(u===DB.admin.username&&p===DB.admin.password){DB.loggedInUser='admin';showPage('adminDash');initAdminDash();notify('Welcome, Admin!','success')}
+else{notify('Invalid credentials','error')}
+}
+function custLogin(){
+const acc=document.getElementById('custAccInput').value;
+const pin=document.getElementById('custPinInput').value;
+const c=DB.customers.find(x=>x.accountNumber===acc&&x.pin===pin);
+if(c){DB.loggedInCust=c;showPage('custDash');initCustDash(c);notify('Welcome, '+c.firstName+'!','success')}
+else{notify('Invalid account or PIN','error')}
+}
+function logout(){DB.loggedInUser=null;DB.loggedInCust=null;DB.miningIntervals.forEach(clearInterval);DB.miningIntervals=[];clearInterval(DB.tradeInterval);clearInterval(DB.priceInterval);showPage('coverPage');notify('Logged out','info')}
+
+// ============ SIGNATURE PAD ============
+let sigCtx,sigDrawing=false;
+function initSig(){const c=document.getElementById('sigCanvas');if(!c)return;sigCtx=c.getContext('2d');c.addEventListener('mousedown',e=>{sigDrawing=true;sigCtx.moveTo(e.offsetX,e.offsetY)});c.addEventListener('mousemove',e=>{if(!sigDrawing)return;sigCtx.lineTo(e.offsetX,e.offsetY);sigCtx.stroke()});c.addEventListener('mouseup',()=>sigDrawing=false);c.addEventListener('mouseleave',()=>sigDrawing=false)}
+function clearSig(){const c=document.getElementById('sigCanvas');sigCtx=c.getContext('2d');sigCtx.clearRect(0,0,c.width,c.height)}
+
+// ============ CUSTOMER REGISTRATION ============
+function registerCustomer(){
+const cust={id:Date.now(),firstName:document.getElementById('regFirst').value,lastName:document.getElementById('regLast').value,dob:document.getElementById('regDob').value,gender:document.getElementById('regGender').value,email:document.getElementById('regEmail').value,phone:document.getElementById('regPhone').value,nin:document.getElementById('regNin').value,bvn:document.getElementById('regBvn').value,country:document.getElementById('regCountry').value,accountType:document.getElementById('regAccType').value,accountNumber:genAccNo(),serialNumber:genSerial(),pin:genPin(),status:'pending',photo:null,document:null,signature:null,balances:{},cryptoBalances:{},transactions:[],createdAt:now()};
+CURRENCIES.forEach(c=>cust.balances[c.code]=0);
+CRYPTO_COINS.forEach(c=>cust.cryptoBalances[c.symbol]=0);
+cust.cryptoAddresses={};CRYPTO_COINS.forEach(c=>cust.cryptoAddresses[c.symbol]=genWalletAddr());
+if(!cust.firstName||!cust.lastName||!cust.email){notify('Please fill all required fields','error');return}
+DB.customers.push(cust);
+notify('Registration submitted! Account: '+cust.accountNumber+' | PIN: '+cust.pin,'success');
+notify('Admin must approve your account','info');
+showPage('custLogin');
